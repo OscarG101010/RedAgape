@@ -1,0 +1,62 @@
+
+# Compilación y archivos generados
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa]rtifacts/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.rsuser
+*.sln.ide
+
+# Visual Studio Code
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
+
+# Rider
+.idea/
+*.sln.iml
+
+# NuGet
+*.nupkg
+*.snupkg
+.nuget/
+
+# Archivos temporales y logs
+[Tt]emp/
+[Tt]mp/
+*.tmp
+*.log
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Certificados de desarrollo
+*.pfx
+*.p12
+*.key
+
+# Secretos y configuración local
+appsettings.Local.json
+secrets.json
+
+# Bases de datos locales (opcional)
+*.mdf
+*.ldf
+*.sqlite
+*.db
+
+# Publicación
+publish/

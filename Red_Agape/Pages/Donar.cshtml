@@ -1,0 +1,32 @@
+﻿@page
+@model DonarModel
+
+<form method="post">
+    <div asp-validation-summary="ModelOnly"></div>
+
+    <input asp-for="Input.NombreDonante" />
+    <span asp-validation-for="Input.NombreDonante"></span>
+
+    <!-- radios de tipo de entrega -->
+    <input type="radio" asp-for="Input.TipoEntrega" value="RecoleccionDomicilio" /> Pasen por mis artículos
+    <input type="radio" asp-for="Input.TipoEntrega" value="PuntoAcopio" /> Los llevo a un punto de acopio
+
+    <div id="bloque-direccion">
+        <input asp-for="Input.Direccion" />
+    </div>
+
+    <div id="lista-articulos">
+        <div class="articulo">
+            <input name="Input.Articulos[0].Descripcion" />
+            <input name="Input.Articulos[0].Cantidad" type="number" value="1" />
+        </div>
+    </div>
+    <button type="button" id="btn-agregar">+ Agregar artículo</button>
+
+    <button type="submit">Enviar donación</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/donar.js"></script>
+}
