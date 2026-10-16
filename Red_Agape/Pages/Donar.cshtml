@@ -1,9 +1,10 @@
 ﻿@page
-@model DonarModel
+@model Red_Agape.Pages.DonarModel
 
 <form method="post">
     <div asp-validation-summary="ModelOnly"></div>
 
+    <P>nombre:</P>
     <input asp-for="Input.NombreDonante" />
     <span asp-validation-for="Input.NombreDonante"></span>
 
@@ -12,11 +13,13 @@
     <input type="radio" asp-for="Input.TipoEntrega" value="PuntoAcopio" /> Los llevo a un punto de acopio
 
     <div id="bloque-direccion">
+        <p>direccion:</p>
         <input asp-for="Input.Direccion" />
     </div>
 
     <div id="lista-articulos">
         <div class="articulo">
+            <p>articulos</p>
             <input name="Input.Articulos[0].Descripcion" />
             <input name="Input.Articulos[0].Cantidad" type="number" value="1" />
         </div>
