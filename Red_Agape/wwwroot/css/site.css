@@ -1,5 +1,6 @@
 html {
   font-size: 14px;
+  min-height: 100%;
 }
 
 @media (min-width: 768px) {
@@ -18,7 +19,32 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+body > .container {
+    width: 100%;
+    flex: 1 0 auto;
+}
+
+body > footer.footer {
+    position: static;
+    width: 100%;
+    margin-top: auto;
+    flex-shrink: 0;
+}
+
+footer.footer {
+    position: static !important;
+    bottom: auto;
+    width: 100%;
+    margin-top: 20px;
+    line-height: normal;
+    white-space: normal;
+    flex-shrink: 0;
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {

@@ -1,0 +1,233 @@
+﻿/* Variables de color*/
+:root {
+    --color-acento: #FFB000;
+    --color-tarjeta: #E5C07B;
+    --color-secundario: #8C6A3E;
+    --color-texto: #1C1C1C;
+    --color-fondo: #F7F1E3;
+}
+
+/* Configuración general */
+* {
+    box-sizing: border-box;
+}
+
+/* Estilos para el cuerpo de la página */
+body {
+    margin: 0;
+    background-color: var(--color-fondo);
+    color: var(--color-texto);
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* Contenedor principal */
+.pagina-donar {
+    padding: 35px 16px;
+}
+
+/* Tarjeta principal */
+.tarjeta {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 600px;
+    margin: auto;
+    padding: 30px;
+    gap: 15px;
+    align-items: stretch;
+    background-color: var(--color-tarjeta);
+    border: 1px solid var(--color-tarjeta);
+    border-radius: 18px;
+    box-shadow: 0 8px 25px rgba(30, 60, 45, 0.08);
+}
+
+    .tarjeta h2 {
+        margin: 0;
+        font-size: 1.1rem;
+    }
+
+    .tarjeta h3 {
+        margin: 0 0 5px;
+        font-size: 1rem;
+    }
+
+/* Encabezado tarjeta */
+.tarjeta .encabezado-donar {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto 5px;
+    text-align: center;
+}
+
+    .tarjeta .encabezado-donar h1 {
+        margin: 0 0 8px;
+        font-size: 2rem;
+    }
+
+    .tarjeta .encabezado-donar p {
+        margin: 0;
+        color: var(--color-secundario);
+    }
+
+/* Campos y secciones */
+.campo,
+.tipo-entrega,
+.lista-articulos,
+.articulo {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    min-width: 0;
+}
+
+/* Etiquetas */
+.tarjeta label {
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+/* Entradas de texto y números */
+.campo input,
+.articulo input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--color-tarjeta);
+    border-radius: 8px;
+    background-color: var(--color-fondo);
+    color: var(--color-texto);
+    font: inherit;
+}
+
+    .campo input:focus,
+    .articulo input:focus {
+        outline: 2px solid var(--color-secundario);
+        outline-offset: 1px;
+    }
+
+/* Tipo de entrega */
+.tipo-entrega,
+.articulo{
+    padding: 18px;
+    background-color: var(--color-fondo);
+    border: 1px solid var(--color-tarjeta);
+    border-radius: 12px;
+    margin: 5px 0;
+}
+
+/* Opciones de entrega */
+.opcion {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px;
+    background-color: var(--color-fondo);
+    border: 1px solid var(--color-tarjeta);
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+    .opcion:has(input:checked) {
+        border-color: var(--color-secundario);
+        outline: 1px solid var(--color-secundario);
+    }
+
+    .opcion input[type="radio"] {
+        width: 18px;
+        height: 18px;
+        margin: 0;
+        accent-color: var(--color-secundario);
+        flex-shrink: 0;
+    }
+
+    .opcion span {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .opcion small {
+        color: var(--color-secundario);
+        font-size: 0.85rem;
+        font-weight: normal;
+    }
+
+/* Lista de artículos */
+.lista-articulos {
+    gap: 15px;
+}
+
+.articulo {
+    padding: 18px;
+    background-color: var(--color-fondo);
+    border: 1px solid var(--color-tarjeta);
+    border-radius: 12px;
+}
+
+/* Botones */
+.acciones {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+    .acciones button {
+        width: 100%;
+        padding: 13px 16px;
+        border-radius: 9px;
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+/* Botón secundario */
+.btn-secundario {
+    background-color: var(--color-fondo);
+    color: var(--color-texto);
+    border: 1px solid var(--color-acento);
+}
+
+    .btn-secundario:hover {
+        background-color: var(--color-tarjeta);
+    }
+
+/* Botón principal */
+.btn-principal {
+    background-color: var(--color-acento);
+    color: var(--color-texto);
+    border: 1px solid var(--color-acento);
+}
+
+    .btn-principal:hover {
+        background-color: var(--color-tarjeta);
+    }
+
+/* Mensajes de validación */
+[asp-validation-for],
+.field-validation-error,
+.validation-summary-errors {
+    color: #9B2620;
+    font-size: 0.875rem;
+}
+
+/* Diseño adaptable a móviles */
+@media (max-width: 480px) {
+    .pagina-donar {
+        padding: 24px 12px;
+    }
+
+    .tarjeta {
+        padding: 18px;
+        gap: 20px;
+    }
+
+    .tipo-entrega,
+    .articulo {
+        padding: 14px;
+    }
+
+    .encabezado-donar h1 {
+        font-size: 1.7rem;
+    }
+}
