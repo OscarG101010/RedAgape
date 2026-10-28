@@ -1,26 +1,33 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Red_Agape.Models
+﻿namespace Red_Agape.Models
 {
-    public enum TipoEntrega { RecoleccionDomicilio, PuntoAcopio }
+    public enum TipoEntrega
+    {
+        Recoleccion,
+        EntregaDirecta
+    }
 
     public class Donacion
     {
-        [Required] public string NombreDonante { get; set; } = "";
-        [Required, EmailAddress] public string Correo { get; set; } = "";
-        [Phone] public string? Telefono { get; set; }
+        public int DonacionId { get; set; }
+        public int DonanteId { get; set; }
+        public int ZonaId { get; set; }
+        public int OrgDestinoId { get; set; }
+        public int? PeticionOrgId { get; set; }
+        public int EstadoDonacionId { get; set; }
 
-        [Required] public TipoEntrega TipoEntrega { get; set; }
-        public string? Direccion { get; set; }   // solo si es recolección
+        public TipoEntrega TipoEntrega { get; set; } = TipoEntrega.Recoleccion;
+        public string? DireccionRecoger { get; set; }
+        public DateTime FechaRegistro { get; set; }
+        public string Descripcion { get; set; }
 
-        public List<ArticuloInput> Articulos { get; set; } = new() { new() };
-        public string? Notas { get; set; }
-    }
+        // Propiedades de navegación
+        public Usuario Donante { get; set; } = null!;
+        public Zona Zona { get; set; } = null!;
+        public Organizacion OrgDestino { get; set; } = null!;
+        public PeticionOrg? PeticionOrg { get; set; }
+        public EstadoDonacion EstadoDonacion { get; set; } = null!;
 
-    public class ArticuloInput
-    {
-        [Required] public string Descripcion { get; set; } = "";
-        [Required] public string Categoria { get; set; } = "";
-        [Range(1, 999)] public int Cantidad { get; set; } = 1;
+        public ICollection<ArticuloDonado> ArticulosDonados { get; set; } = new List<ArticuloDonado>();
+        public ICollection<HistorialEstado> HistorialesEstado { get; set; } = new List<HistorialEstado>();
     }
 }
