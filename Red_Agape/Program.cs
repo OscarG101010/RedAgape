@@ -5,7 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-builder.Services.AddDbContext<RedAgapeContext>(options =>
+builder.Services.AddDbContext<RedAgapeContext>(options => //ASP.Net Core permite este método para inyección de dependencias
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();

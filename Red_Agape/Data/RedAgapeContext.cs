@@ -76,12 +76,27 @@ namespace Red_Agape.Data
             mb.Entity<Usuario>()
               .HasMany(u => u.Roles)
               .WithMany(r => r.Usuarios)
-              .UsingEntity(j => j.ToTable("UsuarioRol")); // Define la entidad intermedia UsuarioRol
+              .UsingEntity<Dictionary<string, object>>( // El diccionario representa los atributos de la entidad, clave: string, valor: object
+                "UsuarioRol",
+                j => j.HasOne<Rol>().WithMany().HasForeignKey("RolId").OnDelete(DeleteBehavior.Cascade), // asigna la relación con la tabla de sus llaves foraneas
+                j => j.HasOne<Usuario>().WithMany().HasForeignKey("UsuarioId").OnDelete(DeleteBehavior.Cascade),
+                j => {
+                    j.ToTable("UsuarioRol"); // Define la entidad intermedia UsuarioRol
+                    j.HasKey("UsuarioId", "RolId"); // Define la llave compuesta con los nombres reales ya que antes EF las asumía mal, para poder llamarlas
+                });
 
             mb.Entity<ArticuloDonado>()
               .HasMany(a => a.Categorias)
               .WithMany(c => c.ArticulosDonados)
-              .UsingEntity(j => j.ToTable("ArticuloCategoria")); // Define la entidad intermedia ArticuloCategoria
+              .UsingEntity<Dictionary<string, object>>(
+                "ArticuloCategoria",
+                j => j.HasOne<Categoria>().WithMany().HasForeignKey("CategoriaId"),
+                j => j.HasOne<ArticuloDonado>().WithMany().HasForeignKey("ArticuloDonadoId"),
+                j =>
+                {
+                    j.ToTable("ArticuloCategoria");
+                    j.HasKey("ArticuloDonadoId", "CategoriaId");
+                });
 
             // Muchos a muchos con clase intermedia (tiene CantidadSolicitada)
             mb.Entity<CategoriaPeticionOrg>(e =>
