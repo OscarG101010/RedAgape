@@ -18,18 +18,16 @@
             <div asp-validation-summary="ModelOnly"></div> <!--error handler-->
 
             <section class="campo">
-                    <label asp-for="Input.NombreDonante">
+                    <label>
                         Nombre del donante
                     </label>
-                    <input asp-for="Input.NombreDonante" placeholder="Escribe tu nombre" />
-                    <span asp-validation-for="Input.NombreDonante"></span>
+                    <span></span>
             </section>
 
             <section class="tipo-entrega">
                 <h2>¿Cómo deseas entregar tus artículos?</h2>
             
                 <label class="opcion">
-                    <input type="radio" asp-for="Input.TipoEntrega" value="RecoleccionDomicilio" />
                     
                     <span>
                         <strong>Recolección a domicilio</strong>
@@ -38,7 +36,6 @@
                 </label>
 
                 <label class="opcion">
-                    <input type="radio" asp-for="Input.TipoEntrega" value="PuntoAcopio" />
                     <span>
                         <strong>Punto de Encuentro</strong>
                         <small>Llevarás los artículos personalmente.</small>
@@ -47,11 +44,10 @@
             </section>
 
             <section class="campo">
-                <label asp-for="Input.Direccion">
+                <label>
                     Dirección de recolección
                 </label>
-                <input asp-for="Input.Direccion" placeholder="Calle, número, colonia" />
-                <span asp-validation-for="Input.Direccion"></span>
+                <span></span>
             </section>
 
             <div class="lista-articulos">
@@ -60,20 +56,15 @@
                 <div class="articulo">
                     <h3>Artículo 1</h3>
 
-                    <label for="descripcion-0">Descripción</label>
-                    <input id="descripcion-0"
-                        name="Input.Articulos[0].Descripcion"
-                        placeholder="Ej. Ropa en buen estado" />
+                    <label>Descripción</label>
 
-                    <label for="cantidad-0">Cantidad</label>
-                    <input id="cantidad-0"
-                        name="Input.Articulos[0].Cantidad"
-                        type="number" min="1" value="1" />
+                    <label>Cantidad</label>
+               
                 </div>
             </div>
 
             <div class="acciones">
-                <button type="button" class="btn-secundario" id="btn-agregar">+ Agregar artículo</button>
+                <button type="submit" class="btn-secundario" id="btn-agregar">+ Agregar artículo</button>
 
                 <button type="submit" class="btn-principal">Enviar donación</button>
             </div>
