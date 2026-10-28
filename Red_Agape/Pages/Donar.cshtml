@@ -1,33 +1,76 @@
 ﻿@page
 @model Red_Agape.Pages.DonarModel
 
-<form method="post">
-    <div asp-validation-summary="ModelOnly"></div>
+<link rel="stylesheet" href="~/css/donar.css" />
 
-    <P>nombre:</P>
-    <input asp-for="Input.NombreDonante" />
-    <span asp-validation-for="Input.NombreDonante"></span>
+<div class="pagina-donar">
+    
+    <div class="tarjeta">
 
-    <!-- radios de tipo de entrega -->
-    <input type="radio" asp-for="Input.TipoEntrega" value="RecoleccionDomicilio" /> Pasen por mis artículos
-    <input type="radio" asp-for="Input.TipoEntrega" value="PuntoAcopio" /> Los llevo a un punto de acopio
+        <header class="encabezado-donar">
+            <h1>Haz una donación</h1>
+            <p>Tus artículos pueden hacer la diferencia.</p>
+        </header>
 
-    <div id="bloque-direccion">
-        <p>direccion:</p>
-        <input asp-for="Input.Direccion" />
+        <hr />
+
+        <form method="post">
+            <div asp-validation-summary="ModelOnly"></div> <!--error handler-->
+
+            <section class="campo">
+                    <label>
+                        Nombre del donante
+                    </label>
+                    <span></span>
+            </section>
+
+            <section class="tipo-entrega">
+                <h2>¿Cómo deseas entregar tus artículos?</h2>
+            
+                <label class="opcion">
+                    
+                    <span>
+                        <strong>Recolección a domicilio</strong>
+                        <small>Pasaremos por tus artículos.</small>
+                    </span>
+                </label>
+
+                <label class="opcion">
+                    <span>
+                        <strong>Punto de Encuentro</strong>
+                        <small>Llevarás los artículos personalmente.</small>
+                    </span>
+                </label>
+            </section>
+
+            <section class="campo">
+                <label>
+                    Dirección de recolección
+                </label>
+                <span></span>
+            </section>
+
+            <div class="lista-articulos">
+                <h2>Artículos para donar</h2>
+
+                <div class="articulo">
+                    <h3>Artículo 1</h3>
+
+                    <label>Descripción</label>
+
+                    <label>Cantidad</label>
+               
+                </div>
+            </div>
+
+            <div class="acciones">
+                <button type="submit" class="btn-secundario" id="btn-agregar">+ Agregar artículo</button>
+
+                <button type="submit" class="btn-principal">Enviar donación</button>
+            </div>
+        </form>
     </div>
-
-    <div id="lista-articulos">
-        <div class="articulo">
-            <p>articulos</p>
-            <input name="Input.Articulos[0].Descripcion" />
-            <input name="Input.Articulos[0].Cantidad" type="number" value="1" />
-        </div>
-    </div>
-    <button type="button" id="btn-agregar">+ Agregar artículo</button>
-
-    <button type="submit">Enviar donación</button>
-</form>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
