@@ -397,3 +397,228 @@ body {
         text-align: left;
     }
 }
+
+/* CAJITA FLOTANTE DE USUARIO / LOGIN / REGISTRO (NAVBAR) */
+.user-menu-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.btn-user-toggle {
+    background-color: var(--color-white);
+    color: var(--color-text-main);
+    border: 2px solid var(--color-secondary-Accent);
+    font-weight: 700;
+    padding: 10px 18px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+    .btn-user-toggle:hover {
+        background-color: var(--color-card-alt);
+    }
+
+.role-pill {
+    background-color: var(--color-primary-cta);
+    color: var(--color-text-main);
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-weight: 800;
+}
+
+/* Cajita desplegable debajo del botón */
+.auth-dropdown-box {
+    display: none;
+    position: absolute;
+    top: calc(100% + 12px);
+    right: 0;
+    width: 320px;
+    background-color: var(--color-bg-main);
+    border: 2px solid var(--color-secondary-Accent);
+    border-radius: var(--radius-md);
+    box-shadow: 0 10px 25px rgba(28, 28, 28, 0.18);
+    padding: 20px;
+    z-index: 250;
+}
+
+    .auth-dropdown-box.show {
+        display: block;
+        animation: fadeInDropdown 0.18s ease-out;
+    }
+
+@keyframes fadeInDropdown {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Pestañas (Iniciar Sesión | Registrarse) dentro de la cajita */
+.auth-tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    background-color: var(--color-card-alt);
+    padding: 4px;
+    border-radius: var(--radius-sm);
+    margin-bottom: 16px;
+}
+
+.auth-tab-btn {
+    background: transparent;
+    border: none;
+    padding: 8px 10px;
+    font-weight: 700;
+    font-size: 0.88rem;
+    color: var(--color-text-main);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+    .auth-tab-btn.active {
+        background-color: var(--color-bg-main);
+        box-shadow: 0 2px 6px rgba(28, 28, 28, 0.1);
+    }
+
+.auth-tab-pane {
+    display: none;
+}
+
+    .auth-tab-pane.active {
+        display: block;
+    }
+
+.auth-alert {
+    background-color: var(--color-card-alt);
+    border-left: 4px solid var(--color-secondary-Accent);
+    padding: 8px 12px;
+    font-size: 0.85rem;
+    margin-bottom: 12px;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+.user-session-info {
+    border-bottom: 1px solid var(--color-card-alt);
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+}
+
+    .user-session-info p {
+        font-size: 0.9rem;
+        margin-bottom: 4px;
+    }
+
+.user-QuickLinks {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+    .user-QuickLinks a {
+        padding: 8px 10px;
+        border-radius: 6px;
+        background-color: rgba(229, 192, 123, 0.35);
+        font-size: 0.9rem;
+        font-weight: 600 !important;
+    }
+
+
+/* MEJORAS DE FORMULARIO: 2 COLUMNAS Y REGLAS PASSWORD */
+.auth-dropdown-box {
+    width: 350px;
+}
+
+.form-row-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+/* Asegura que el ojito nativo del navegador esté siempre habilitado */
+input[type="password"]::-ms-reveal {
+    display: inline-block;
+}
+
+/* Lista de requisitos de seguridad de la contraseña */
+.password-rules {
+    list-style: none;
+    padding: 8px 10px;
+    margin: 6px 0 12px 0;
+    background-color: rgba(229, 192, 123, 0.25);
+    border-radius: 6px;
+    font-size: 0.78rem;
+}
+
+    .password-rules li {
+        color: var(--color-secondary-Accent);
+        margin-bottom: 3px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: color 0.2s ease;
+    }
+
+        .password-rules li.valid {
+            color: #2E7D32;
+            font-weight: 700;
+        }
+/* Contenedor para el ojo limpio dentro del input de contraseña */
+.password-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+    .password-input-wrapper input {
+        padding-right: 40px !important;
+    }
+
+/* Ocultar el de Edge para usar siempre el mismo ojo limpio en todos los navegadores */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+    display: none;
+}
+
+.btn-eye-toggle {
+    position: absolute;
+    right: 10px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-secondary-Accent);
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+}
+
+    .btn-eye-toggle:hover {
+        opacity: 1;
+    }
+
+    .btn-eye-toggle svg {
+        width: 18px;
+        height: 18px;
+        stroke: currentColor;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        fill: none;
+    }
