@@ -1,10 +1,7 @@
-<<<<<<< Updated upstream
 using Microsoft.EntityFrameworkCore;
 using Red_Agape.Data;
-=======
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Red_Agape.Models;
->>>>>>> Stashed changes
 
 var builder = WebApplication.CreateBuilder(args);
 

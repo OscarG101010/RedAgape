@@ -4,12 +4,9 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-<<<<<<< Updated upstream
 using Microsoft.EntityFrameworkCore;
 using Red_Agape.Data;
-=======
 using Microsoft.Data.SqlClient;
->>>>>>> Stashed changes
 using Red_Agape.Models;
 
 namespace Red_Agape.Pages
@@ -17,13 +14,11 @@ namespace Red_Agape.Pages
     // Modelo de página que procesa el inicio de sesión, el registro y el cierre de sesión.
     public class IndexModel : PageModel
     {
-<<<<<<< Updated upstream
-        private readonly RedAgapeContext _context;
-        public void OnGet()
-        {
-=======
-        private readonly IConfiguration _configuration;
 
+        private readonly RedAgapeContext _context;
+       
+        private readonly IConfiguration _configuration;
+        
         public IndexModel(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -191,7 +186,6 @@ namespace Red_Agape.Pages
             await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(claimsIdentity));
->>>>>>> Stashed changes
         }
     }
 }
