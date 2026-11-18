@@ -1,4 +1,6 @@
-﻿namespace Red_Agape.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Red_Agape.Models
 {
     public enum TipoEntrega
     {

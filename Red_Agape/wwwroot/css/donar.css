@@ -1,75 +1,84 @@
-﻿/* Variables de color*/
+﻿/* PALETA OFICIAL - RED ÁGAPE (misma que index-agape.css) */
 :root {
-    --color-acento: #FFB000;
-    --color-tarjeta: #E5C07B;
-    --color-secundario: #8C6A3E;
-    --color-texto: #1C1C1C;
-    --color-fondo: #F7F1E3;
+    --color-primary-cta: #FFB000;
+    --color-card-alt: #E5C07B;
+    --color-secondary-Accent: #8C6A3E;
+    --color-text-main: #1C1C1C;
+    --color-bg-main: #F7F1E3;
+    --color-white: #FFFFFF;
+    --color-error: #9B2620;
+    --shadow-soft: 0 4px 12px rgba(28, 28, 28, 0.08);
+    --radius-md: 12px;
+    --radius-sm: 8px;
 }
 
-/* Configuración general */
+/* ESTILOS BASE */
 * {
     box-sizing: border-box;
 }
 
-/* Estilos para el cuerpo de la página */
 body {
     margin: 0;
-    background-color: var(--color-fondo);
-    color: var(--color-texto);
-    font-family: "Segoe UI", Arial, sans-serif;
+    background-color: var(--color-bg-main);
+    color: var(--color-text-main);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    line-height: 1.6;
 }
 
-/* Contenedor principal */
+/* CONTENEDOR Y TARJETA PRINCIPAL */
 .pagina-donar {
-    padding: 35px 16px;
+    padding: 50px 16px;
 }
 
-/* Tarjeta principal */
 .tarjeta {
     display: flex;
     flex-direction: column;
+    gap: 20px;
     width: 100%;
-    max-width: 600px;
-    margin: auto;
-    padding: 30px;
-    gap: 15px;
-    align-items: stretch;
-    background-color: var(--color-tarjeta);
-    border: 1px solid var(--color-tarjeta);
-    border-radius: 18px;
-    box-shadow: 0 8px 25px rgba(30, 60, 45, 0.08);
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 35px;
+    background-color: var(--color-card-alt);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-soft);
 }
 
     .tarjeta h2 {
         margin: 0;
-        font-size: 1.1rem;
+        font-size: 1.2rem;
     }
 
     .tarjeta h3 {
-        margin: 0 0 5px;
+        margin: 0;
         font-size: 1rem;
     }
 
-/* Encabezado tarjeta */
-.tarjeta .encabezado-donar {
-    width: 100%;
-    max-width: 600px;
-    margin: 0 auto 5px;
+    .tarjeta hr {
+        width: 100%;
+        border: none;
+        border-top: 2px solid var(--color-secondary-Accent);
+        opacity: 0.35;
+        margin: 0;
+    }
+
+/* ENCABEZADO */
+.encabezado-donar {
     text-align: center;
 }
 
-    .tarjeta .encabezado-donar h1 {
+    .encabezado-donar h1 {
         margin: 0 0 8px;
-        font-size: 2rem;
+        font-size: 2.2rem;
+        line-height: 1.2;
     }
 
-    .tarjeta .encabezado-donar p {
+    .encabezado-donar p {
         margin: 0;
-        color: var(--color-secundario);
+        color: var(--color-secondary-Accent);
+        font-weight: 600;
     }
 
-/* Campos y secciones */
+/* SECCIONES (bloques internos) */
 .campo,
 .tipo-entrega,
 .lista-articulos,
@@ -81,90 +90,161 @@ body {
     min-width: 0;
 }
 
-/* Etiquetas */
+.tipo-entrega,
+.articulo {
+    padding: 20px;
+    background-color: var(--color-bg-main);
+    border: 1px solid var(--color-secondary-Accent);
+    border-radius: var(--radius-md);
+}
+
+.lista-articulos {
+    gap: 15px;
+}
+
+/* ETIQUETAS */
 .tarjeta label {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     font-weight: 600;
 }
 
-/* Entradas de texto y números */
-.campo input,
-.articulo input {
+/* CAMPOS DE FORMULARIO (input, select, textarea) */
+.tarjeta input:not([type="radio"]):not([type="file"]),
+.tarjeta select,
+.tarjeta textarea {
     width: 100%;
-    padding: 12px;
-    border: 1px solid var(--color-tarjeta);
-    border-radius: 8px;
-    background-color: var(--color-fondo);
-    color: var(--color-texto);
+    padding: 10px 12px;
+    border: 1px solid var(--color-secondary-Accent);
+    border-radius: var(--radius-sm);
+    background-color: var(--color-white);
+    color: var(--color-text-main);
     font: inherit;
 }
 
-    .campo input:focus,
-    .articulo input:focus {
-        outline: 2px solid var(--color-secundario);
+.tarjeta textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+    .tarjeta input:focus,
+    .tarjeta select:focus,
+    .tarjeta textarea:focus {
+        outline: 2px solid var(--color-primary-cta);
         outline-offset: 1px;
     }
 
-/* Tipo de entrega */
-.tipo-entrega,
-.articulo{
-    padding: 18px;
-    background-color: var(--color-fondo);
-    border: 1px solid var(--color-tarjeta);
-    border-radius: 12px;
-    margin: 5px 0;
-}
-
-/* Opciones de entrega */
+/* TIPO DE ENTREGA */
 .opcion {
     display: flex;
     align-items: center;
     gap: 12px;
     padding: 14px;
-    background-color: var(--color-fondo);
-    border: 1px solid var(--color-tarjeta);
-    border-radius: 10px;
+    background-color: var(--color-white);
+    border: 2px solid var(--color-card-alt);
+    border-radius: var(--radius-sm);
     cursor: pointer;
+    transition: border-color 0.2s ease;
 }
 
+    .opcion:hover {
+        border-color: var(--color-primary-cta);
+    }
+
     .opcion:has(input:checked) {
-        border-color: var(--color-secundario);
-        outline: 1px solid var(--color-secundario);
+        border-color: var(--color-primary-cta);
+        background-color: rgba(255, 176, 0, 0.12);
     }
 
     .opcion input[type="radio"] {
         width: 18px;
         height: 18px;
         margin: 0;
-        accent-color: var(--color-secundario);
+        accent-color: var(--color-secondary-Accent);
         flex-shrink: 0;
     }
 
     .opcion span {
         display: flex;
         flex-direction: column;
-        gap: 4px;
+        gap: 2px;
     }
 
     .opcion small {
-        color: var(--color-secundario);
+        color: var(--color-secondary-Accent);
         font-size: 0.85rem;
         font-weight: normal;
     }
 
-/* Lista de artículos */
-.lista-articulos {
-    gap: 15px;
+/* ARTÍCULOS */
+.articulo-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
 }
 
-.articulo {
-    padding: 18px;
-    background-color: var(--color-fondo);
-    border: 1px solid var(--color-tarjeta);
-    border-radius: 12px;
+.btn-quitar,
+.btn-quitar-foto {
+    padding: 6px 14px;
+    background-color: transparent;
+    color: var(--color-text-main);
+    border: 2px solid var(--color-secondary-Accent);
+    border-radius: var(--radius-sm);
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
 }
 
-/* Botones */
+    .btn-quitar:hover,
+    .btn-quitar-foto:hover {
+        background-color: var(--color-card-alt);
+    }
+
+/* FOTO */
+.foto-campo {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+}
+
+    .foto-campo input[type="file"] {
+        width: 100%;
+        padding: 8px;
+        background-color: var(--color-white);
+        border: 1px dashed var(--color-secondary-Accent);
+        border-radius: var(--radius-sm);
+        font: inherit;
+    }
+
+        .foto-campo input[type="file"]::file-selector-button {
+            margin-right: 12px;
+            padding: 6px 14px;
+            background-color: var(--color-card-alt);
+            color: var(--color-text-main);
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+.foto-preview {
+    max-width: 100%;
+    max-height: 220px;
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--color-card-alt);
+    object-fit: cover;
+}
+
+    /* respeta el atributo hidden que usa donar.js */
+    .foto-preview[hidden],
+    .btn-quitar-foto[hidden] {
+        display: none;
+    }
+
+/* BOTONES DE ACCIÓN */
 .acciones {
     display: flex;
     flex-direction: column;
@@ -173,53 +253,55 @@ body {
 
     .acciones button {
         width: 100%;
-        padding: 13px 16px;
-        border-radius: 9px;
+        padding: 13px 24px;
+        border-radius: var(--radius-sm);
         font: inherit;
         font-weight: 700;
         cursor: pointer;
-        transition: background-color 0.2s;
+        transition: transform 0.2s ease, filter 0.2s ease, background-color 0.2s ease;
     }
 
-/* Botón secundario */
-.btn-secundario {
-    background-color: var(--color-fondo);
-    color: var(--color-texto);
-    border: 1px solid var(--color-acento);
-}
-
-    .btn-secundario:hover {
-        background-color: var(--color-tarjeta);
-    }
-
-/* Botón principal */
 .btn-principal {
-    background-color: var(--color-acento);
-    color: var(--color-texto);
-    border: 1px solid var(--color-acento);
+    background-color: var(--color-primary-cta);
+    color: var(--color-text-main);
+    border: none;
 }
 
     .btn-principal:hover {
-        background-color: var(--color-tarjeta);
+        filter: brightness(0.95);
+        transform: translateY(-2px);
     }
 
-/* Mensajes de validación */
-[asp-validation-for],
-.field-validation-error,
-.validation-summary-errors {
-    color: #9B2620;
-    font-size: 0.875rem;
+.btn-secundario {
+    background-color: transparent;
+    color: var(--color-text-main);
+    border: 2px solid var(--color-primary-cta);
 }
 
-/* Diseño adaptable a móviles */
+    .btn-secundario:hover {
+        background-color: var(--color-bg-main);
+    }
+
+/* VALIDACIÓN (clases que genera ASP.NET Core) */
+.field-validation-error,
+.validation-summary-errors {
+    color: var(--color-error);
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.input-validation-error {
+    border-color: var(--color-error) !important;
+}
+
+/* RESPONSIVE */
 @media (max-width: 480px) {
     .pagina-donar {
         padding: 24px 12px;
     }
 
     .tarjeta {
-        padding: 18px;
-        gap: 20px;
+        padding: 20px;
     }
 
     .tipo-entrega,

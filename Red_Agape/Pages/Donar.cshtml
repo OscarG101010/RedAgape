@@ -1,10 +1,11 @@
-﻿@page
+﻿
+@page
 @model Red_Agape.Pages.DonarModel
 
 <link rel="stylesheet" href="~/css/donar.css" />
 
 <div class="pagina-donar">
-    
+
     <div class="tarjeta">
 
         <header class="encabezado-donar">
@@ -14,21 +15,26 @@
 
         <hr />
 
-        <form method="post">
-            <div asp-validation-summary="ModelOnly"></div> <!--error handler-->
+        <form method="post" asp-page-handler="Donacion" enctype="multipart/form-data">
 
+            <div asp-validation-summary="ModelOnly"></div>
+
+            <!-- Información del donante -->
             <section class="campo">
-                    <label>
-                        Nombre del donante
-                    </label>
-                    <span></span>
+                <label>Nombre del donante</label>
+                <span>@User.Identity?.Name</span>
             </section>
 
+            <!-- Tipo de entrega -->
             <section class="tipo-entrega">
+
                 <h2>¿Cómo deseas entregar tus artículos?</h2>
-            
+
                 <label class="opcion">
-                    
+                    <input type="radio"
+                           asp-for="Input.TipoEntrega"
+                           value="Recoleccion" />
+
                     <span>
                         <strong>Recolección a domicilio</strong>
                         <small>Pasaremos por tus artículos.</small>
@@ -36,43 +42,285 @@
                 </label>
 
                 <label class="opcion">
+                    <input type="radio"
+                           asp-for="Input.TipoEntrega"
+                           value="EntregaDirecta" />
+
                     <span>
-                        <strong>Punto de Encuentro</strong>
+                        <strong>Punto de encuentro</strong>
                         <small>Llevarás los artículos personalmente.</small>
                     </span>
                 </label>
+
+                <span asp-validation-for="Input.TipoEntrega"></span>
+
             </section>
 
+            <!-- Dirección -->
             <section class="campo">
-                <label>
+
+                <label asp-for="Input.DireccionRecoger">
                     Dirección de recolección
                 </label>
-                <span></span>
+
+                <input asp-for="Input.DireccionRecoger"
+                       placeholder="Calle, número, colonia..." />
+
+                <span asp-validation-for="Input.DireccionRecoger"></span>
+
             </section>
 
+            <!-- Zona -->
+            <section class="campo">
+
+                <label asp-for="Input.ZonaId">Zona</label>
+
+                <select asp-for="Input.ZonaId" asp-items="Model.Zonas">
+                    <option value="">Selecciona tu zona...</option>
+                </select>
+
+                <span asp-validation-for="Input.ZonaId"></span>
+
+            </section>
+
+            <!-- Organización -->
+            <section class="campo">
+
+                <label asp-for="Input.OrgDestinoId">
+                    Organización destinataria
+                </label>
+
+                <select asp-for="Input.OrgDestinoId"
+                        asp-items="Model.Organizaciones">
+                    <option value="">Selecciona una organización...</option>
+                </select>
+
+                <span asp-validation-for="Input.OrgDestinoId"></span>
+
+            </section>
+
+            <!-- Descripción general -->
+            <section class="campo">
+
+                <label asp-for="Input.Descripcion">
+                    Comentarios adicionales
+                </label>
+
+                <textarea asp-for="Input.Descripcion"
+                          placeholder="Agrega información adicional sobre tu donación..."></textarea>
+
+                <span asp-validation-for="Input.Descripcion"></span>
+
+            </section>
+
+            <!-- Artículos -->
             <div class="lista-articulos">
+
                 <h2>Artículos para donar</h2>
 
-                <div class="articulo">
-                    <h3>Artículo 1</h3>
+                <div id="contenedor-articulos">
 
-                    <label>Descripción</label>
+                    @for (var i = 0; i < Model.Input.Articulos.Count; i++)
+                    {
+                        <div class="articulo" data-articulo>
 
-                    <label>Cantidad</label>
-               
+                            <div class="articulo-header">
+                                <h3>
+                                    Artículo <span class="num">@(i + 1)</span>
+                                </h3>
+
+                                <button type="button" class="btn-quitar">
+                                    Quitar
+                                </button>
+                            </div>
+
+                            <label asp-for="Input.Articulos[i].Nombre">
+                                Nombre
+                            </label>
+
+                            <input asp-for="Input.Articulos[i].Nombre" />
+
+                            <span asp-validation-for="Input.Articulos[i].Nombre"></span>
+
+
+                            <label asp-for="Input.Articulos[i].Descripcion">
+                                Descripción
+                            </label>
+
+                            <input asp-for="Input.Articulos[i].Descripcion" />
+
+                            <span asp-validation-for="Input.Articulos[i].Descripcion"></span>
+
+
+                            <label asp-for="Input.Articulos[i].Cantidad">
+                                Cantidad
+                            </label>
+
+                            <input asp-for="Input.Articulos[i].Cantidad"
+                                   type="number"
+                                   min="1" />
+
+                            <span asp-validation-for="Input.Articulos[i].Cantidad"></span>
+
+
+                            <label asp-for="Input.Articulos[i].Condicion">
+                                Condición
+                            </label>
+
+                            <select asp-for="Input.Articulos[i].Condicion">
+                                <option value="">Selecciona...</option>
+                                <option value="Nuevo">Nuevo</option>
+                                <option value="BuenEstado">Buen estado</option>
+                                <option value="Usada">Usada</option>
+                            </select>
+
+                            <span asp-validation-for="Input.Articulos[i].Condicion"></span>
+
+
+                            <label asp-for="Input.Articulos[i].Foto">Fotografía</label>
+
+                            <div class="foto-campo">
+                                <input asp-for="Input.Articulos[i].Foto" type="file" accept="image/*" />
+
+                                <img class="foto-preview" alt="Vista previa de la fotografía" hidden />
+
+                                <button type="button" class="btn-quitar-foto" hidden>Quitar foto</button>
+                            </div>
+
+                            <span asp-validation-for="Input.Articulos[i].Foto"></span>
+
+                        </div>
+                    }
+
                 </div>
+
             </div>
 
+            <!-- Acciones -->
             <div class="acciones">
-                <button type="submit" class="btn-secundario" id="btn-agregar">+ Agregar artículo</button>
 
-                <button type="submit" class="btn-principal">Enviar donación</button>
+                <button type="button"
+                        class="btn-secundario"
+                        id="btn-agregar">
+                    + Agregar artículo
+                </button>
+
+                <button type="submit" class="btn-principal">
+                    Enviar donación
+                </button>
+
             </div>
+
+            <!-- Plantilla para artículos dinámicos -->
+            <template id="plantilla-articulo">
+
+                <div class="articulo" data-articulo>
+
+                    <div class="articulo-header">
+                        <h3>
+                            Artículo <span class="num"></span>
+                        </h3>
+
+                        <button type="button" class="btn-quitar">
+                            Quitar
+                        </button>
+                    </div>
+
+                    <label for="Input_Articulos___INDEX___Nombre">
+                        Nombre
+                    </label>
+
+                    <input type="text"
+                           id="Input_Articulos___INDEX___Nombre"
+                           name="Input.Articulos[__INDEX__].Nombre"
+                           data-val="true"
+                           data-val-required="El nombre es obligatorio." />
+
+
+                    <span data-valmsg-for="Input.Articulos[__INDEX__].Nombre"
+                          data-valmsg-replace="true"></span>
+
+
+                    <label for="Input_Articulos___INDEX___Descripcion">
+                        Descripción
+                    </label>
+
+                    <input type="text"
+                           id="Input_Articulos___INDEX___Descripcion"
+                           name="Input.Articulos[__INDEX__].Descripcion" />
+
+
+                    <label for="Input_Articulos___INDEX___Cantidad">
+                        Cantidad
+                    </label>
+
+                    <input type="number"
+                           min="1"
+                           value="1"
+                           id="Input_Articulos___INDEX___Cantidad"
+                           name="Input.Articulos[__INDEX__].Cantidad" />
+
+                    <span data-valmsg-for="Input.Articulos[__INDEX__].Cantidad"
+                          data-valmsg-replace="true"></span>
+
+
+                    <label for="Input_Articulos___INDEX___Condicion">
+                        Condición
+                    </label>
+
+                    <select id="Input_Articulos___INDEX___Condicion"
+                            name="Input.Articulos[__INDEX__].Condicion">
+
+                        <option value="">Selecciona...</option>
+                        <option value="Nuevo">Nuevo</option>
+                        <option value="BuenEstado">Buen estado</option>
+                        <option value="Usada">Usada</option>
+
+                    </select>
+
+
+                    <label for="Input_Articulos___INDEX___Foto">Fotografía</label>
+
+                    <div class="foto-campo">
+                        <input type="file"
+                               accept="image/*"
+                               id="Input_Articulos___INDEX___Foto"
+                               name="Input.Articulos[__INDEX__].Foto" />
+
+                        <img class="foto-preview" alt="Vista previa de la fotografía" hidden />
+
+                        <button type="button" class="btn-quitar-foto" hidden>Quitar foto</button>
+                    </div>
+
+                </div>
+
+            </template>
+
         </form>
+
     </div>
+
 </div>
 
+<!-- FOOTER -->
+<footer class="agape-footer">
+    <div class="container footer-content">
+        <div class="footer-brand">
+            <h3>Red Ágape</h3>
+            <p>Una red para compartir y ayudar.</p>
+        </div>
+        <div class="footer-academic">
+            <p><strong>Proyecto Final:</strong> Programación Orientada a Objetos 2</p>
+            <p><strong>Profesor:</strong> Ing. Jesus Samuel Villalobos Escobar</p>
+            <p>&copy; @DateTime.Now.Year - Equipo Ágape</p>
+        </div>
+    </div>
+</footer>
+
 @section Scripts {
+
     <partial name="_ValidationScriptsPartial" />
+
     <script src="~/js/donar.js"></script>
+
 }
