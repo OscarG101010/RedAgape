@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Red_Agape.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Red_Agape.Models;
 
@@ -18,19 +19,15 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.LoginPath = "/Index";
         options.AccessDeniedPath = "/Index";
         options.ExpireTimeSpan = TimeSpan.FromHours(8);
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
         options.SlidingExpiration = true;
+        options.Cookie.HttpOnly = true;
     });
 
 // 2. Configurar Políticas basadas en Roles (escalable para añadir más roles después)
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy(PoliticasAgape.SoloAdmin, policy =>
-        policy.RequireRole(RolesAgape.Administrador));
+builder.Services.AddAuthorization();
 
-    // Ejemplo escalable: hoy Admin, mañana Admin u Organizador
-    options.AddPolicy(PoliticasAgape.GestionDonaciones, policy =>
-        policy.RequireRole(RolesAgape.Administrador, RolesAgape.Organizador));
-});
+builder.Services.AddScoped<IPasswordHasher<Usuario>, PasswordHasher<Usuario>>(); // Cuando se pida hasher se agrega el servicio
 
 var app = builder.Build();
 
@@ -43,6 +40,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseRouting();
+app.UseStaticFiles();
 
 // IMPORTANTE: UseAuthentication siempre va antes de UseAuthorization
 app.UseAuthentication();
