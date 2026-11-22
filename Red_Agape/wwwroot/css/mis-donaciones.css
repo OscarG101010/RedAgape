@@ -1,0 +1,348 @@
+﻿/* MIS DONACIONES - RED ÁGAPE
+   Usa las variables de index-agape.css (se carga antes en la vista). */
+
+.pagina-mis-donaciones {
+    width: 100%;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 50px 16px 70px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+    /* ENCABEZADO */
+    .pagina-mis-donaciones .encabezado {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid var(--color-card-alt);
+    }
+
+        .pagina-mis-donaciones .encabezado h1 {
+            font-size: 2.2rem;
+            line-height: 1.2;
+        }
+
+    /* BOTONES */
+    .pagina-mis-donaciones .btn-principal {
+        display: inline-block;
+        padding: 12px 24px;
+        background-color: var(--color-primary-cta);
+        color: var(--color-text-main);
+        border: none;
+        border-radius: var(--radius-sm);
+        font-weight: 700;
+        text-decoration: none;
+        cursor: pointer;
+        transition: transform 0.2s ease, filter 0.2s ease;
+    }
+
+        .pagina-mis-donaciones .btn-principal:hover {
+            filter: brightness(0.95);
+            transform: translateY(-2px);
+        }
+
+    .pagina-mis-donaciones .btn-peligro {
+        margin-top: 6px;
+        padding: 10px 20px;
+        background-color: transparent;
+        color: var(--color-error, #9B2620);
+        border: 2px solid var(--color-error, #9B2620);
+        border-radius: var(--radius-sm);
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+        .pagina-mis-donaciones .btn-peligro:hover {
+            background-color: var(--color-error, #9B2620);
+            color: var(--color-white);
+        }
+
+    /* AVISO (TempData) */
+    .pagina-mis-donaciones .aviso {
+        padding: 12px 16px;
+        background-color: var(--color-card-alt);
+        border-left: 4px solid var(--color-secondary-Accent);
+        border-radius: 4px;
+        font-weight: 600;
+    }
+
+    /* FILTROS POR ESTADO */
+    .pagina-mis-donaciones .filtros {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .pagina-mis-donaciones .chip {
+        padding: 6px 16px;
+        background-color: var(--color-white);
+        color: var(--color-text-main);
+        border: 2px solid var(--color-card-alt);
+        border-radius: 20px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: border-color 0.2s ease, background-color 0.2s ease;
+    }
+
+        .pagina-mis-donaciones .chip:hover {
+            border-color: var(--color-primary-cta);
+        }
+
+        .pagina-mis-donaciones .chip.activo {
+            background-color: rgba(255, 176, 0, 0.18);
+            border-color: var(--color-primary-cta);
+        }
+
+    /* SIN DONACIONES */
+    .pagina-mis-donaciones .vacio {
+        padding: 40px 20px;
+        text-align: center;
+        color: var(--color-secondary-Accent);
+        font-weight: 600;
+        background-color: rgba(229, 192, 123, 0.25);
+        border: 1px dashed var(--color-secondary-Accent);
+        border-radius: var(--radius-md);
+    }
+
+    /* TARJETA DE DONACIÓN */
+    .pagina-mis-donaciones .donacion {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        padding: 28px;
+        background-color: var(--color-white);
+        border: 2px solid var(--color-card-alt);
+        border-top: 6px solid var(--color-primary-cta);
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-soft);
+    }
+
+    .pagina-mis-donaciones .donacion-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+        padding-bottom: 14px;
+        border-bottom: 1px solid var(--color-card-alt);
+    }
+
+        .pagina-mis-donaciones .donacion-header h2 {
+            font-size: 1.3rem;
+        }
+
+        .pagina-mis-donaciones .donacion-header small {
+            color: var(--color-secondary-Accent);
+            font-size: 0.9rem;
+        }
+
+    /* ESTADO (pastilla) */
+    .pagina-mis-donaciones .estado {
+        flex-shrink: 0;
+        padding: 4px 14px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 800;
+        background-color: var(--color-card-alt);
+        color: var(--color-text-main);
+    }
+
+.estado-pendiente {
+    background-color: #FFF1CC !important;
+    color: #7A5200 !important;
+}
+
+.estado-aprobada {
+    background-color: #DCEBFA !important;
+    color: #1B4F8A !important;
+}
+
+.estado-enproceso {
+    background-color: #E6DDF5 !important;
+    color: #5A3E8C !important;
+}
+
+.estado-completada {
+    background-color: #DDF0DE !important;
+    color: #2E7D32 !important;
+}
+
+.estado-rechazada,
+.estado-cancelada {
+    background-color: #F6DAD8 !important;
+    color: #9B2620 !important;
+}
+
+/* ENTREGA Y COMENTARIO */
+.pagina-mis-donaciones .entrega {
+    font-size: 0.95rem;
+}
+
+.pagina-mis-donaciones .comentario {
+    padding: 10px 14px;
+    background-color: var(--color-bg-main);
+    border-left: 4px solid var(--color-card-alt);
+    border-radius: 4px;
+    font-size: 0.92rem;
+    font-style: italic;
+}
+
+/* ACORDEONES (Artículos / Seguimiento) */
+.pagina-mis-donaciones details {
+    background-color: rgba(229, 192, 123, 0.25);
+    border: 1px solid var(--color-card-alt);
+    border-radius: var(--radius-sm);
+    padding: 0 16px;
+}
+
+.pagina-mis-donaciones summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    font-weight: 700;
+    cursor: pointer;
+    list-style: none;
+    transition: color 0.2s ease;
+}
+
+    .pagina-mis-donaciones summary::-webkit-details-marker {
+        display: none;
+    }
+
+    .pagina-mis-donaciones summary::after {
+        content: "▾";
+        color: var(--color-secondary-Accent);
+        transition: transform 0.2s ease;
+    }
+
+    .pagina-mis-donaciones summary:hover {
+        color: var(--color-secondary-Accent);
+    }
+
+.pagina-mis-donaciones details[open] summary::after {
+    transform: rotate(180deg);
+}
+
+.pagina-mis-donaciones details[open] {
+    padding-bottom: 12px;
+}
+
+/* LISTA DE ARTÍCULOS */
+.pagina-mis-donaciones .lista-art {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+    .pagina-mis-donaciones .lista-art li {
+        display: flex;
+        gap: 14px;
+        align-items: flex-start;
+        padding: 12px;
+        background-color: var(--color-white);
+        border: 1px solid var(--color-card-alt);
+        border-radius: var(--radius-sm);
+    }
+
+    .pagina-mis-donaciones .lista-art img {
+        width: 72px;
+        height: 72px;
+        flex-shrink: 0;
+        object-fit: cover;
+        border: 2px solid var(--color-card-alt);
+        border-radius: var(--radius-sm);
+    }
+
+    .pagina-mis-donaciones .lista-art small {
+        display: block;
+        color: var(--color-secondary-Accent);
+        font-weight: 600;
+    }
+
+.pagina-mis-donaciones .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 6px;
+}
+
+.pagina-mis-donaciones .tag {
+    padding: 2px 10px;
+    background-color: var(--color-bg-main);
+    border: 1px solid var(--color-card-alt);
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+/* SEGUIMIENTO (línea de tiempo) */
+.pagina-mis-donaciones .timeline {
+    list-style: none;
+    position: relative;
+    margin-left: 6px;
+    padding-left: 22px;
+    border-left: 2px solid var(--color-card-alt);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+    .pagina-mis-donaciones .timeline li {
+        position: relative;
+    }
+
+        .pagina-mis-donaciones .timeline li::before {
+            content: "";
+            position: absolute;
+            left: -30px;
+            top: 6px;
+            width: 12px;
+            height: 12px;
+            background-color: var(--color-primary-cta);
+            border: 2px solid var(--color-white);
+            border-radius: 50%;
+        }
+
+    .pagina-mis-donaciones .timeline .fecha {
+        display: block;
+        color: var(--color-secondary-Accent);
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+
+    .pagina-mis-donaciones .timeline p {
+        font-size: 0.92rem;
+    }
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+    .pagina-mis-donaciones {
+        padding: 24px 12px 40px;
+    }
+
+        .pagina-mis-donaciones .encabezado h1 {
+            font-size: 1.7rem;
+        }
+
+        .pagina-mis-donaciones .donacion {
+            padding: 18px;
+        }
+
+        .pagina-mis-donaciones .donacion-header {
+            flex-direction: column;
+        }
+
+        .pagina-mis-donaciones .lista-art img {
+            width: 56px;
+            height: 56px;
+        }
+}

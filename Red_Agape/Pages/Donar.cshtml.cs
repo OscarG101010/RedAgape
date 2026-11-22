@@ -198,7 +198,7 @@ namespace Red_Agape.Pages
             var ext = Path.GetExtension(foto.FileName).ToLowerInvariant();
             var nombre = $"{Guid.NewGuid()}{ext}";
 
-            var carpeta = Path.Combine(_env.WebRootPath, "uploads", "donaciones");
+            var carpeta = Path.Combine(_env.ContentRootPath, "..", "RedAgapeUploads", "donaciones");
             Directory.CreateDirectory(carpeta);
 
             var rutaFisica = Path.Combine(carpeta, nombre);

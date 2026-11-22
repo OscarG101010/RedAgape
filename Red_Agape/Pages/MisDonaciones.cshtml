@@ -1,4 +1,132 @@
 ﻿@page
+@using Red_Agape.Models
 @model Red_Agape.Pages.MisDonacionesModel
 @{
+    // "Central Standard Time (Mexico)" en Windows; "America/Monterrey" en Linux
+    var tz = TimeZoneInfo.FindSystemTimeZoneById(
+        OperatingSystem.IsWindows() ? "Central Standard Time (Mexico)" : "America/Monterrey");
+
+    // Convierte una fecha guardada en UTC a hora de Monterrey
+    string Local(DateTime utc) =>
+        TimeZoneInfo.ConvertTimeFromUtc(DateTime.SpecifyKind(utc, DateTimeKind.Utc), tz)
+            .ToString("dd/MM/yyyy HH:mm");
 }
+
+<link rel="stylesheet" href="~/css/index-agape.css" />
+<link rel="stylesheet" href="~/css/mis-donaciones.css" />
+<partial name="_NavbarAgape" />
+
+<main class="agape-main">
+    <div class="pagina-mis-donaciones">
+
+        <header class="encabezado">
+            <h1>Mis donaciones</h1>
+            <a class="btn-principal" asp-page="/Donar">+ Nueva donación</a>
+        </header>
+
+        @if (!string.IsNullOrEmpty(Model.Mensaje))
+        {
+            <div class="aviso">@Model.Mensaje</div>
+        }
+
+        <!-- Filtro por estado -->
+        <nav class="filtros">
+            <a asp-page="/MisDonaciones" class="chip @(Model.EstadoId == null ? "activo" : "")">Todas</a>
+            @foreach (var e in Model.Estados)
+            {
+                <a asp-page="/MisDonaciones" asp-route-EstadoId="@e.EstadoDonacionId"
+                   class="chip @(Model.EstadoId == e.EstadoDonacionId ? "activo" : "")">@e.Nombre</a>
+            }
+        </nav>
+
+        @if (!Model.Donaciones.Any())
+        {
+            <div class="vacio">
+                <p>Aún no tienes donaciones registradas.</p>
+            </div>
+        }
+
+        @foreach (var d in Model.Donaciones)
+        {
+            <article class="donacion">
+
+                <header class="donacion-header">
+                    <div>
+                        <h2>Donación #@d.DonacionId</h2>
+                        <small>@Local(d.FechaRegistro) · para <strong>@d.Organizacion</strong></small>
+                    </div>
+                    <span class="estado estado-@d.Estado.Replace(" ", "").ToLower()">@d.Estado</span>
+                </header>
+
+                <!-- Tipo de entrega -->
+                <p class="entrega">
+                    <strong>Entrega:</strong>
+                    @if (d.TipoEntrega == TipoEntrega.Recoleccion)
+                    {
+                        <span>Recolección a domicilio — @d.DireccionRecoger</span>
+                    }
+                    else
+                    {
+                        <span>Entrega directa en @d.DireccionOrganizacion</span>
+                    }
+                </p>
+
+                @if (!string.IsNullOrEmpty(d.Descripcion))
+                {
+                    <p class="comentario">@d.Descripcion</p>
+                }
+
+                <!-- Artículos -->
+                <details open>
+                    <summary>Artículos (@d.Articulos.Count)</summary>
+                    <ul class="lista-art">
+                        @foreach (var a in d.Articulos)
+                        {
+                            <li>
+                                @if (!string.IsNullOrEmpty(a.FotoUrl))
+                                {
+                                    <img src="@a.FotoUrl" alt="@a.Nombre" />
+                                }
+                                <div>
+                                    <strong>@a.Nombre</strong> × @a.Cantidad
+                                    <small>@(a.Condicion == Condicion.BuenEstado ? "Buen estado" : a.Condicion.ToString())</small>
+                                    <div class="tags">
+                                        @foreach (var c in a.Categorias)
+                                        {
+                                            <span class="tag">@c</span>
+                                        }
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                </details>
+
+                <!-- Trazabilidad -->
+                <details>
+                    <summary>Seguimiento</summary>
+                    <ol class="timeline">
+                        @foreach (var h in d.Historial)
+                        {
+                            <li>
+                                <span class="fecha">@Local(h.Fecha)</span>
+                                <strong>@h.Estado</strong>
+                                <p>@h.Descripcion</p>
+                            </li>
+                        }
+                    </ol>
+                </details>
+
+                @if (d.Estado == "Pendiente")
+                {
+                    <form method="post" asp-page-handler="Cancelar" asp-route-id="@d.DonacionId"
+                          onsubmit="return confirm('¿Cancelar esta donación?');">
+                        <button type="submit" class="btn-peligro">Cancelar donación</button>
+                    </form>
+                }
+
+            </article>
+        }
+
+    </div>
+</main>
