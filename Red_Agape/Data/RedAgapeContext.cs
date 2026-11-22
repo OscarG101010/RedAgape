@@ -125,6 +125,11 @@ namespace Red_Agape.Data
                 e.HasOne(x => x.PeticionOrg).WithMany().HasForeignKey(x => x.PeticionOrgId);
                 e.HasOne(x => x.Categoria).WithMany().HasForeignKey(x => x.CategoriaId);
             });
+
+            mb.Entity<Zona>().Property(z => z.Latitud).HasPrecision(9, 6);
+            mb.Entity<Zona>().Property(z => z.Longitud).HasPrecision(9, 6);
+            mb.Entity<Organizacion>().Property(o => o.Latitud).HasPrecision(9, 6);
+            mb.Entity<Organizacion>().Property(o => o.Longitud).HasPrecision(9, 6);
         }
     }
 }

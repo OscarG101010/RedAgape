@@ -14,6 +14,8 @@
         public bool EsDonatariaAutorizada { get; set; } = false;
         public bool Verificado { get; set; } = false;
         public bool Activo { get; set; } = true;
+        public decimal? Latitud { get; set; }
+        public decimal? Longitud { get; set; }
 
         // Propiedades de navegación
         public Zona Zona { get; set; } = null!;
