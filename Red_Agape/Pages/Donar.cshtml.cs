@@ -38,6 +38,7 @@ namespace Red_Agape.Pages
         [Required(ErrorMessage = "La descripción es obligatoria.")]
         public string Descripcion { get; set; } = "";
         public Condicion Condicion { get; set; }
+        public List<int> CategoriasIds { get; set; } = new();
         public IFormFile? Foto { get; set; } // todavía no guarda foto porq es mucho pedo
     }
     [Authorize]
@@ -45,8 +46,9 @@ namespace Red_Agape.Pages
     {
         private readonly List<string> _tipoEntrega = new List<string> { "Recoleccion", "EntregaDirecta" };
         private readonly List<string> _condicion = new List<string> { "Nuevo", "BuenEstado", "Usada" };
-        public SelectList Zonas { get; set; } = null!;
-        public SelectList Organizaciones { get; set; } = null!;
+        public List<Categoria> Categorias { get; set; } = new();
+        public List<Zona> Zonas { get; set; } = null!;
+        public List<Organizacion> Organizaciones { get; set; } = null!;
         private readonly RedAgapeContext _context;
         private readonly IWebHostEnvironment _env;
 
@@ -84,6 +86,16 @@ namespace Red_Agape.Pages
             if (Input.OrgDestinoId is not null && !await _context.Organizaciones.AnyAsync(o => o.OrganizacionId == Input.OrgDestinoId))
                 ModelState.AddModelError("Input.OrgDestinoId", "Organización no válida.");
 
+            var idsValidos = await _context.Categorias
+                .Select(c => c.CategoriaId)
+                .ToListAsync();
+
+            for (var i = 0; i < Input.Articulos.Count; i++)
+            {
+                if (Input.Articulos[i].CategoriasIds.Any(id => !idsValidos.Contains(id)))
+                    ModelState.AddModelError($"Input.Articulos[{i}].CategoriasIds", "Categoría no válida.");
+            }
+
             for (var i = 0; i < Input.Articulos.Count; i++) // Validación Foto
             {
                 var foto = Input.Articulos[i].Foto;
@@ -105,7 +117,7 @@ namespace Red_Agape.Pages
 
             // Lógica de negocio: crear la donación y sus artículos, y guardar en la base de datos
 
-            var donanteId = 1; // TEMPORAL: luego, el usuario autenticado
+            var donanteId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             var fechaActual = DateTime.UtcNow;
             var estadoInicial = await _context.EstadosDonacion // estado inicial donación
                 .FirstAsync(e => e.Nombre == "Pendiente");
@@ -115,13 +127,18 @@ namespace Red_Agape.Pages
             {
                 var rutaFoto = await GuardarFotoAsync(a.Foto);
 
+                var categorias = await _context.Categorias
+                    .Where(c => a.CategoriasIds.Contains(c.CategoriaId))
+                    .ToListAsync();
+
                 articulos.Add(new ArticuloDonado
                 {
                     Nombre = a.Nombre,
                     Descripcion = a.Descripcion,
                     Cantidad = a.Cantidad,
                     Condicion = a.Condicion,
-                    FotoUrl = rutaFoto
+                    FotoUrl = rutaFoto,
+                    Categorias = categorias
                 });
             }
 
@@ -159,7 +176,8 @@ namespace Red_Agape.Pages
             _context.Donaciones.Add(donacion);
             await _context.SaveChangesAsync();
 
-            return RedirectToPage();
+            TempData["Mensaje"] = "¡Donación registrada! Aquí puedes darle seguimiento.";
+            return RedirectToPage("/MisDonaciones");
         }
 
         public async Task<IActionResult> OnPostArticulo()
@@ -192,13 +210,22 @@ namespace Red_Agape.Pages
 
         private async Task CargarListasAsync()
         {
-            Zonas = new SelectList(
-                await _context.Zonas.AsNoTracking().OrderBy(z => z.Nombre).ToListAsync(),
-                "ZonaId", "Nombre");
+            Zonas = await _context.Zonas
+                .AsNoTracking()
+                .OrderBy(z => z.Nombre)
+                .ToListAsync();
 
-            Organizaciones = new SelectList(
-                await _context.Organizaciones.AsNoTracking().OrderBy(o => o.Nombre).ToListAsync(),
-                "OrganizacionId", "Nombre");
+            Organizaciones = await _context.Organizaciones
+                .AsNoTracking()
+                .OrderBy(o => o.Nombre)
+                .ToListAsync();
+
+            Categorias = await _context.Categorias
+                .AsNoTracking()
+                .Where(c => c.CategoriaPadreId == null)
+                .Include(c => c.Subcategorias)
+                .OrderBy(c => c.Nombre)
+                .ToListAsync();
         }
     }
 }

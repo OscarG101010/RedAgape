@@ -38,7 +38,7 @@
 
                     <span>
                         <strong>Recolección a domicilio</strong>
-                        <small>Pasaremos por tus artículos.</small>
+                        <small>Pasaremos por tus artículos a la dirección establecida.</small>
                     </span>
                 </label>
 
@@ -48,8 +48,8 @@
                            value="EntregaDirecta" />
 
                     <span>
-                        <strong>Punto de encuentro</strong>
-                        <small>Llevarás los artículos personalmente.</small>
+                        <strong>Entrega a la Organización</strong>
+                        <small>Llevarás los artículos a la dirección de la organización.</small>
                     </span>
                 </label>
 
@@ -58,7 +58,7 @@
             </section>
 
             <!-- Dirección -->
-            <section class="campo">
+            <section class="campo" id="seccion-direccion">
 
                 <label asp-for="Input.DireccionRecoger">
                     Dirección de recolección
@@ -76,7 +76,7 @@
 
                 <label asp-for="Input.ZonaId">Zona</label>
 
-                <select asp-for="Input.ZonaId" asp-items="Model.Zonas">
+                <select asp-for="Input.ZonaId">
                     <option value="">Selecciona tu zona...</option>
                 </select>
 
@@ -95,6 +95,8 @@
                         asp-items="Model.Organizaciones">
                     <option value="">Selecciona una organización...</option>
                 </select>
+
+                <p class="info-entrega" id="info-direccion-org" hidden></p>
 
                 <span asp-validation-for="Input.OrgDestinoId"></span>
 
@@ -177,6 +179,28 @@
 
                             <span asp-validation-for="Input.Articulos[i].Condicion"></span>
 
+                            <fieldset class="categorias-campo">
+                                <legend>Categorías</legend>
+                                <small class="categorias-ayuda">Elige todas las que apliquen a este artículo.</small>
+
+                                @foreach (var general in Model.Categorias)
+                                {
+                                    <details>
+                                    <summary>@general.Nombre</summary>
+
+                                    @foreach (var sub in general.Subcategorias.OrderBy(s => s.Nombre))
+                                    {
+                                        <label class="categoria-opcion">
+                                            <input type="checkbox"
+                                                name="Input.Articulos[@i].CategoriasIds"
+                                                value="@sub.CategoriaId"
+                                                checked="@Model.Input.Articulos[i].CategoriasIds.Contains(sub.CategoriaId)" />
+                                            @sub.Nombre
+                                        </label>
+                                    }
+                                    </details>
+                                }
+                            </fieldset>
 
                             <label asp-for="Input.Articulos[i].Foto">Fotografía</label>
 
@@ -279,6 +303,27 @@
 
                     </select>
 
+                    <fieldset class="categorias-campo">
+                        <legend>Categorías</legend>
+                        <small class="categorias-ayuda">Elige todas las que apliquen a este artículo.</small>
+
+                        @foreach (var general in Model.Categorias)
+                        {
+                            <details>
+                                <summary>@general.Nombre</summary>
+
+                                @foreach (var sub in general.Subcategorias.OrderBy(s => s.Nombre))
+                                {
+                                    <label class="categoria-opcion">
+                                        <input type="checkbox"
+                                               name="Input.Articulos[__INDEX__].CategoriasIds"
+                                               value="@sub.CategoriaId" />
+                                        @sub.Nombre
+                                    </label>
+                                }
+                            </details>
+                        }
+                    </fieldset>
 
                     <label for="Input_Articulos___INDEX___Foto">Fotografía</label>
 

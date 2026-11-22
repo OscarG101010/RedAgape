@@ -20,7 +20,7 @@ namespace Red_Agape.Models
         public TipoEntrega TipoEntrega { get; set; } = TipoEntrega.Recoleccion;
         public string? DireccionRecoger { get; set; }
         public DateTime FechaRegistro { get; set; }
-        public string Descripcion { get; set; }
+        public string? Descripcion { get; set; }
 
         // Propiedades de navegación
         public Usuario Donante { get; set; } = null!;

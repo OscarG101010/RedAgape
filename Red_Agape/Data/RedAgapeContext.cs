@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Red_Agape.Models;
+using System.Reflection.Emit;
 
 namespace Red_Agape.Data
 {
@@ -97,6 +98,25 @@ namespace Red_Agape.Data
                     j.ToTable("ArticuloCategoria");
                     j.HasKey("ArticuloDonadoId", "CategoriaId");
                 });
+
+            mb.Entity<Organizacion>()
+                .HasMany(o => o.Categorias)
+                .WithMany(c => c.Organizaciones)
+                .UsingEntity<Dictionary<string, object>>(
+                    "OrganizacionCategoria",
+                    j => j.HasOne<Categoria>().WithMany().HasForeignKey("CategoriaId"),
+                    j => j.HasOne<Organizacion>().WithMany().HasForeignKey("OrganizacionId"),
+                    j =>
+                    {
+                        j.ToTable("OrganizacionCategoria");
+                        j.HasKey("OrganizacionId", "CategoriaId");
+                    });
+
+            mb.Entity<Categoria>()
+                .HasOne(c => c.Padre)
+                .WithMany(c => c.Subcategorias)
+                .HasForeignKey(c => c.CategoriaPadreId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             // Muchos a muchos con clase intermedia (tiene CantidadSolicitada)
             mb.Entity<CategoriaPeticionOrg>(e =>

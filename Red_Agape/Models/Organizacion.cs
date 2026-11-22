@@ -18,5 +18,7 @@
         // Propiedades de navegación
         public Zona Zona { get; set; } = null!;
         public Usuario Encargado { get; set; } = null!;
+
+        public ICollection<Categoria> Categorias { get; set; } = new List<Categoria>();
     }
 }
