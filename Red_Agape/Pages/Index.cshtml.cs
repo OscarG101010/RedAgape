@@ -28,7 +28,6 @@ namespace Red_Agape.Pages
          Datos admin: 
         Nombre: Administrador RedAgape
         Correo: admin@redagape.local
-        Contraseña: AQAAAAIAAYagAAAAEAHnBvFqV2qGv8fzQs7uVXih4iWleotPMVIc0KxJZKlfHdKZtd4eio7/lEZgYKuDbA==
         */
         private readonly RedAgapeContext _context;
 
@@ -86,7 +85,7 @@ namespace Red_Agape.Pages
             }
 
             await CrearCookieSesionAsync(usuario); // Guarda la información del login en la cookie de autenticación.
-            return RedirectToPage();
+            return VolverA(returnUrl);
         }
 
         // Valida los datos del formulario y crea la sesión de un nuevo usuario.

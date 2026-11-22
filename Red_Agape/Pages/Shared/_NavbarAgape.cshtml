@@ -81,8 +81,8 @@
 
                         <div class="auth-tabs">
                             <!-- Las pestañas permiten alternar entre iniciar sesión y registrarse. -->
-                            <button type="button" class="auth-tab-btn @(TempData["TabActiva"]?.ToString() == "registro" ? "" : "active")" onclick="cambiarTabAuth('login', this)">Iniciar Sesión</button>
-                            <button type="button" class="auth-tab-btn @(TempData["TabActiva"]?.ToString() == "registro" ? "active" : "")" onclick="cambiarTabAuth('registro', this)">Registrarse</button>
+                            <button type="button" class="auth-tab-btn @(TempData["TabActiva"]?.ToString() == "registro" ? "" : "active")" data-auth-tab="login">Iniciar Sesión</button>
+                            <button type="button" class="auth-tab-btn @(TempData["TabActiva"]?.ToString() == "registro" ? "active" : "")" data-auth-tab="registro">Registrarse</button>
                         </div>
 
                         <!-- Pestaña 1: Iniciar Sesión -->
@@ -97,7 +97,7 @@
                                     <label for="loginPassword">Contraseña</label>
                                     <div class="password-input-wrapper">
                                         <input type="password" id="loginPassword" name="Password" required placeholder="••••••••" />
-                                        <button type="button" class="btn-eye-toggle" onclick="toggleVerPassword('loginPassword', this)" title="Mostrar contraseña">
+                                        <button type="button" class="btn-eye-toggle" data-toggle-password="loginPassword" title="Mostrar contraseña">
                                             <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                                         </button>
                                     </div>
@@ -109,7 +109,7 @@
                         <!-- Pestaña 2: Registrarse -->
                         <div id="tab-registro" class="auth-tab-pane @(TempData["TabActiva"]?.ToString() == "registro" ? "active" : "")">
                             <!-- La validación del navegador se ejecuta antes de enviar el registro al servidor. -->
-                            <form method="post" asp-page="/Index" asp-page-handler="Registro" onsubmit="return validarFormularioRegistro()">
+                            <form id="registerForm" method="post" asp-page="/Index" asp-page-handler="Registro" onsubmit="return">
 
                                 <div class="form-group">
                                     <label for="regUsername">Nombre de usuario</label>
@@ -124,8 +124,8 @@
                                 <div class="form-group">
                                     <label for="regPassword">Contraseña</label>
                                     <div class="password-input-wrapper">
-                                        <input type="password" id="regPassword" name="Password" required placeholder="Crea tu contraseña" oninput="verificarSeguridadPassword()" />
-                                        <button type="button" class="btn-eye-toggle" onclick="toggleVerPassword('regPassword', this)" title="Mostrar contraseña">
+                                        <input type="password" id="regPassword" name="Password" required placeholder="Crea tu contraseña" data-password-check />
+                                        <button type="button" class="btn-eye-toggle" data-toggle-password="regPassword" title="Mostrar contraseña">
                                             <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                                         </button>
                                     </div>
@@ -142,8 +142,8 @@
                                 <div class="form-group">
                                     <label for="regConfirmPassword">Confirmar contraseña</label>
                                     <div class="password-input-wrapper">
-                                        <input type="password" id="regConfirmPassword" name="ConfirmarPassword" required placeholder="Repite tu contraseña" oninput="verificarSeguridadPassword()" />
-                                        <button type="button" class="btn-eye-toggle" onclick="toggleVerPassword('regConfirmPassword', this)" title="Mostrar contraseña">
+                                        <input type="password" id="regConfirmPassword" name="ConfirmarPassword" required placeholder="Repite tu contraseña" data-password-check />
+                                        <button type="button" class="btn-eye-toggle" data-toggle-password="regConfirmPassword" title="Mostrar contraseña">
                                             <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                                         </button>
                                     </div>
