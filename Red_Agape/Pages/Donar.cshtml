@@ -2,8 +2,11 @@
 @page
 @model Red_Agape.Pages.DonarModel
 
+<link rel="stylesheet" href="~/css/index-agape.css" />
 <link rel="stylesheet" href="~/css/donar.css" />
+<partial name="_NavbarAgape" />
 
+<main class="agape-main">
 <div class="pagina-donar">
 
     <div class="tarjeta">
@@ -13,16 +16,14 @@
             <p>Tus artículos pueden hacer la diferencia.</p>
         </header>
 
-        <hr />
-
-        <form method="post" asp-page-handler="Donacion" enctype="multipart/form-data">
+        <form class="form-donar" method="post" asp-page-handler="Donacion" enctype="multipart/form-data">
 
             <div asp-validation-summary="ModelOnly"></div>
 
             <!-- Información del donante -->
-            <section class="campo">
+            <section class="campo campo-donante">
                 <label>Nombre del donante</label>
-                <span>@User.Identity?.Name</span>
+                <span class="donante-nombre">@User.Identity?.Name</span>
             </section>
 
             <!-- Tipo de entrega -->
@@ -301,7 +302,7 @@
     </div>
 
 </div>
-
+</main>
 <!-- FOOTER -->
 <footer class="agape-footer">
     <div class="container footer-content">
@@ -322,5 +323,99 @@
     <partial name="_ValidationScriptsPartial" />
 
     <script src="~/js/donar.js"></script>
+
+    <script>
+        // Referencias a los elementos que controlan el menú de usuario.
+        const btnToggle = document.getElementById('btnUserToggle');
+        const dropdownBox = document.getElementById('authDropdownBox');
+        const wrapper = document.getElementById('userMenuWrapper');
+
+        if (btnToggle && dropdownBox) {
+            // Abre o cierra el menú al pulsar el botón de usuario.
+            btnToggle.addEventListener('click', function (e) {
+                e.stopPropagation();
+                dropdownBox.classList.toggle('show');
+            });
+
+            dropdownBox.addEventListener('click', function (e) {
+                e.stopPropagation();
+            });
+
+            document.addEventListener('click', function (e) {
+                // Cierra el menú cuando se hace clic fuera de él.
+                if (wrapper && !wrapper.contains(e.target)) {
+                    dropdownBox.classList.remove('show');
+                }
+            });
+        }
+
+        function cambiarTabAuth(tabName, btnElement) {
+            // Desactiva la pestaña actual y activa la seleccionada.
+            document.querySelectorAll('.auth-tab-pane').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.auth-tab-btn').forEach(b => b.classList.remove('active'));
+
+            document.getElementById('tab-' + tabName).classList.add('active');
+            btnElement.classList.add('active');
+        }
+
+        function verificarSeguridadPassword() {
+            // Comprueba en tiempo real los requisitos de seguridad de la contraseña.
+            const pwd = document.getElementById('regPassword')?.value || '';
+            const confirmPwd = document.getElementById('regConfirmPassword')?.value || '';
+
+            const tieneLongitud = pwd.length >= 8;
+            const tieneMayuscula = /[A-ZÁÉÍÓÚÑ]/.test(pwd);
+            const tieneEspecial = /[@@#$%!^&*()_+\-=\[\]{};':"\\|,.<>\/?~`]/.test(pwd);
+            const coinciden = pwd.length > 0 && pwd === confirmPwd;
+
+            actualizarItemRegla('rule-length', tieneLongitud, 'Mínimo 8 caracteres');
+            actualizarItemRegla('rule-upper', tieneMayuscula, 'Al menos una letra mayúscula (A-Z)');
+            actualizarItemRegla('rule-special', tieneEspecial, 'Un carácter especial (@@, #, $, %, !, *, etc.)');
+            actualizarItemRegla('rule-match', coinciden, 'Las contraseñas coinciden');
+
+            return tieneLongitud && tieneMayuscula && tieneEspecial && coinciden;
+        }
+
+        function actualizarItemRegla(idElemento, cumple, texto) {
+            // Actualiza el indicador visual de una regla de contraseña.
+            const li = document.getElementById(idElemento);
+            if (!li) return;
+            if (cumple) {
+                li.classList.add('valid');
+                li.textContent = '✔ ' + texto;
+            } else {
+                li.classList.remove('valid');
+                li.textContent = '○ ' + texto;
+            }
+        }
+
+        function validarFormularioRegistro() {
+            // Impide el envío si alguna regla de seguridad no se cumple.
+            if (!verificarSeguridadPassword()) {
+                alert('Por favor asegúrate de que la contraseña cumpla con todos los requisitos de seguridad y que ambas coincidan.');
+                return false;
+            }
+            return true;
+        }
+
+        function toggleVerPassword(inputId, btnEye) {
+            // Alterna entre mostrar y ocultar el contenido de un campo de contraseña.
+            const input = document.getElementById(inputId);
+            if (!input) return;
+
+            const svgOjoAbierto = '<svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>';
+            const svgOjoTachado = '<svg viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>';
+
+            if (input.type === 'password') {
+                input.type = 'text';
+                btnEye.innerHTML = svgOjoTachado;
+                btnEye.title = 'Ocultar contraseña';
+            } else {
+                input.type = 'password';
+                btnEye.innerHTML = svgOjoAbierto;
+                btnEye.title = 'Mostrar contraseña';
+            }
+        }
+    </script>
 
 }

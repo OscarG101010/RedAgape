@@ -27,43 +27,27 @@ body {
 
 /* CONTENEDOR Y TARJETA PRINCIPAL */
 .pagina-donar {
-    padding: 50px 16px;
+    padding: 50px 16px 70px;
 }
 
 .tarjeta {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
     width: 100%;
-    max-width: 680px;
+    max-width: 720px;
     margin: 0 auto;
-    padding: 35px;
-    background-color: var(--color-card-alt);
+    padding: 40px;
+    background-color: var(--color-white);
+    border: 2px solid var(--color-card-alt);
+    border-top: 6px solid var(--color-primary-cta); /* acento de marca */
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-soft);
 }
 
-    .tarjeta h2 {
-        margin: 0;
-        font-size: 1.2rem;
-    }
-
-    .tarjeta h3 {
-        margin: 0;
-        font-size: 1rem;
-    }
-
-    .tarjeta hr {
-        width: 100%;
-        border: none;
-        border-top: 2px solid var(--color-secondary-Accent);
-        opacity: 0.35;
-        margin: 0;
-    }
-
 /* ENCABEZADO */
 .encabezado-donar {
     text-align: center;
+    padding-bottom: 24px;
+    margin-bottom: 28px;
+    border-bottom: 2px solid var(--color-card-alt);
 }
 
     .encabezado-donar h1 {
@@ -78,28 +62,78 @@ body {
         font-weight: 600;
     }
 
-/* SECCIONES (bloques internos) */
+.badge-secondary {
+    background-color: var(--color-card-alt);
+    color: var(--color-text-main);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: inline-block;
+    margin-bottom: 12px;
+}
+
+/* FORMULARIO: aquí estaba el problema, ahora sí hay separación entre secciones */
+.form-donar {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.tarjeta h2 {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.tarjeta h3 {
+    margin: 0;
+    font-size: 1rem;
+}
+
+/* BLOQUES INTERNOS */
 .campo,
 .tipo-entrega,
 .lista-articulos,
 .articulo {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
     width: 100%;
     min-width: 0;
 }
 
+.fila-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
 .tipo-entrega,
 .articulo {
-    padding: 20px;
-    background-color: var(--color-bg-main);
-    border: 1px solid var(--color-secondary-Accent);
+    padding: 22px;
+    background-color: rgba(229, 192, 123, 0.25); /* igual que .section-alt del index */
+    border: 1px solid var(--color-card-alt);
     border-radius: var(--radius-md);
 }
 
+.tipo-entrega {
+    gap: 12px;
+}
+
 .lista-articulos {
-    gap: 15px;
+    gap: 16px;
+}
+
+/* Donante como chip */
+.donante-nombre {
+    display: inline-block;
+    align-self: flex-start;
+    padding: 8px 16px;
+    background-color: var(--color-bg-main);
+    border: 1px solid var(--color-card-alt);
+    border-radius: 20px;
+    font-weight: 700;
+    color: var(--color-secondary-Accent);
 }
 
 /* ETIQUETAS */
@@ -108,7 +142,7 @@ body {
     font-weight: 600;
 }
 
-/* CAMPOS DE FORMULARIO (input, select, textarea) */
+/* CAMPOS */
 .tarjeta input:not([type="radio"]):not([type="file"]),
 .tarjeta select,
 .tarjeta textarea {
@@ -119,6 +153,7 @@ body {
     background-color: var(--color-white);
     color: var(--color-text-main);
     font: inherit;
+    transition: box-shadow 0.2s ease;
 }
 
 .tarjeta textarea {
@@ -129,8 +164,9 @@ body {
     .tarjeta input:focus,
     .tarjeta select:focus,
     .tarjeta textarea:focus {
-        outline: 2px solid var(--color-primary-cta);
-        outline-offset: 1px;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(255, 176, 0, 0.4);
+        border-color: var(--color-primary-cta);
     }
 
 /* TIPO DE ENTREGA */
@@ -143,7 +179,7 @@ body {
     border: 2px solid var(--color-card-alt);
     border-radius: var(--radius-sm);
     cursor: pointer;
-    transition: border-color 0.2s ease;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
 }
 
     .opcion:hover {
@@ -176,12 +212,32 @@ body {
     }
 
 /* ARTÍCULOS */
+.articulo {
+    gap: 8px;
+}
+
 .articulo-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 10px;
+    padding-bottom: 10px;
+    margin-bottom: 6px;
+    border-bottom: 1px solid var(--color-card-alt);
 }
+
+    .articulo-header .num {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 26px;
+        height: 26px;
+        margin-left: 4px;
+        background-color: var(--color-primary-cta);
+        border-radius: 50%;
+        font-size: 0.85rem;
+        font-weight: 800;
+    }
 
 .btn-quitar,
 .btn-quitar-foto {
@@ -238,17 +294,17 @@ body {
     object-fit: cover;
 }
 
-    /* respeta el atributo hidden que usa donar.js */
     .foto-preview[hidden],
     .btn-quitar-foto[hidden] {
         display: none;
     }
 
-/* BOTONES DE ACCIÓN */
+/* BOTONES DE ACCIÓN (mismos estilos que btn-primary-agape / btn-outline-agape) */
 .acciones {
     display: flex;
     flex-direction: column;
     gap: 12px;
+    padding-top: 8px;
 }
 
     .acciones button {
@@ -279,10 +335,10 @@ body {
 }
 
     .btn-secundario:hover {
-        background-color: var(--color-bg-main);
+        background-color: var(--color-card-alt);
     }
 
-/* VALIDACIÓN (clases que genera ASP.NET Core) */
+/* VALIDACIÓN (clases de ASP.NET Core) */
 .field-validation-error,
 .validation-summary-errors {
     color: var(--color-error);
@@ -295,18 +351,23 @@ body {
 }
 
 /* RESPONSIVE */
+@media (max-width: 600px) {
+    .fila-2 {
+        grid-template-columns: 1fr;
+    }
+}
+
 @media (max-width: 480px) {
     .pagina-donar {
-        padding: 24px 12px;
+        padding: 24px 12px 40px;
     }
 
     .tarjeta {
-        padding: 20px;
+        padding: 22px;
     }
 
-    .tipo-entrega,
-    .articulo {
-        padding: 14px;
+    .tipo-entrega, .articulo {
+        padding: 16px;
     }
 
     .encabezado-donar h1 {

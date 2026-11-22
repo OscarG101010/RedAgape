@@ -60,3 +60,5 @@ secrets.json
 
 # Publicación
 publish/
+
+wwwroot/uploads/

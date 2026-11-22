@@ -1,0 +1,160 @@
+﻿@using System.Security.Claims
+@using Red_Agape.Pages
+@{
+    // Si venimos de una redirección de [Authorize], ReturnUrl trae la página a la que queríamos entrar.
+    var returnUrl = Context.Request.Query["ReturnUrl"].ToString();
+    // Si no hay, usamos la página actual.
+    if (string.IsNullOrEmpty(returnUrl)) returnUrl = Context.Request.Path.Value ?? "/";
+}
+
+<!-- BARRA DE NAVEGACIÓN -->
+<header class="agape-navbar">
+    <div class="container nav-container">
+        <!-- Logotipo y nombre de la plataforma. -->
+        <a asp-page="/Index" class="brand-logo">
+            <span class="logo-placeholder">♥</span>
+            <span class="brand-name">Red Ágape</span>
+        </a>
+        <nav class="nav-links">
+            <!-- Enlaces principales para recorrer las secciones de la página. -->
+            <a asp-page="/Index" asp-fragment="proyecto">Proyecto Ágape</a>
+            <!-- Enlaces hacia las futuras pantallas del proyecto -->
+            <a asp-page="/Index" asp-fragment="categorias" class="btn-link">¿Qué Donar?</a>
+            <a asp-page="/Index" asp-fragment="equipo">Equipo Ágape</a>
+            <a asp-page="/Donar" class="btn-primary-agape">Quiero Donar</a>
+
+            <!-- NUEVO: Botón y Cajita Flotante a la derecha de "Quiero Donar" -->
+            <div class="user-menu-wrapper" id="userMenuWrapper">
+                @if (User.Identity != null && User.Identity.IsAuthenticated)
+                {
+                    // Obtiene el rol y el nombre completo desde las claims de la sesión actual.
+                    var rolActual = User.FindFirstValue(ClaimTypes.Role) ?? RolesAgape.Donante;
+                    var nombreCompleto = User.FindFirstValue("NombreCompleto") ?? User.Identity.Name;
+
+                    <!-- En el botón superior mostramos el Nombre de Usuario (o solo el primer nombre si no hubiera) -->
+                    <button type="button" class="btn-user-toggle" id="btnUserToggle">
+                        <span>👤 @User.Identity.Name</span>
+                        <span class="role-pill">@rolActual</span>
+                        <span>▾</span>
+                    </button>
+
+                    <!-- Cajita flotante cuando el usuario YA inició sesión -->
+                    <div class="auth-dropdown-box" id="authDropdownBox">
+                        <div class="user-session-info">
+                            <p><strong>Hola, @nombreCompleto</strong></p>
+                            <p class="text-secondary-agape">Usuario: <strong>@@@User.Identity.Name</strong> · Rol: <strong>@rolActual</strong></p>
+                        </div>
+
+                        <div class="user-QuickLinks">
+                            <!-- Los enlaces de gestión solo se muestran a los roles autorizados. -->
+                            @if (User.IsInRole(RolesAgape.Administrador))
+                            {
+                                <a href="#panel-admin">⚙️ Panel de Administración</a>
+                                <a href="#gestion-usuarios">🛡️ Gestionar Roles y Usuarios</a>
+                            }
+                            @if (User.IsInRole(RolesAgape.Organizacion) || User.IsInRole(RolesAgape.Administrador))
+                            {
+                                <a href="#validar-donativos">📦 Validar Donaciones</a>
+                            }
+                            <a href="#mis-donaciones">❤️ Mis Solicitudes / Donativos</a>
+                        </div>
+
+                        <form method="post" asp-page="/Index" asp-page-handler="Logout">
+                            <button type="submit" class="btn-outline-agape full-width">Cerrar Sesión</button>
+                        </form>
+                    </div>
+                }
+                else
+                {
+                    // Cuando no hay una sesión activa se muestran las opciones de acceso y registro.
+                    <button type="button" class="btn-user-toggle" id="btnUserToggle">
+                        <span>👤 Mi Cuenta</span>
+                        <span>▾</span>
+                    </button>
+
+                    <!-- Cajita flotante con pestañas Iniciar Sesión / Registrarse -->
+                    <div class="auth-dropdown-box @(TempData["AbrirCajita"] != null ? "show" : "")" id="authDropdownBox">
+                        @if (TempData["MensajeAuth"] != null)
+                        {
+                            <div class="auth-alert">@TempData["MensajeAuth"]</div>
+                        }
+
+                        <div class="auth-tabs">
+                            <!-- Las pestañas permiten alternar entre iniciar sesión y registrarse. -->
+                            <button type="button" class="auth-tab-btn @(TempData["TabActiva"]?.ToString() == "registro" ? "" : "active")" onclick="cambiarTabAuth('login', this)">Iniciar Sesión</button>
+                            <button type="button" class="auth-tab-btn @(TempData["TabActiva"]?.ToString() == "registro" ? "active" : "")" onclick="cambiarTabAuth('registro', this)">Registrarse</button>
+                        </div>
+
+                        <!-- Pestaña 1: Iniciar Sesión -->
+                        <div id="tab-login" class="auth-tab-pane @(TempData["TabActiva"]?.ToString() == "registro" ? "" : "active")">
+                            <!-- El formulario envía las credenciales al handler OnPostLoginAsync. -->
+                            <form method="post" asp-page-handler="Login">
+                                <div class="form-group">
+                                    <label for="loginCorreo">Correo o Nombre de usuario</label>
+                                    <input type="text" id="loginCorreo" name="CorreoOUsuario" required placeholder="tu@correo.com o usuario" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="loginPassword">Contraseña</label>
+                                    <div class="password-input-wrapper">
+                                        <input type="password" id="loginPassword" name="Password" required placeholder="••••••••" />
+                                        <button type="button" class="btn-eye-toggle" onclick="toggleVerPassword('loginPassword', this)" title="Mostrar contraseña">
+                                            <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                        </button>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn-primary-agape full-width">Entrar</button>
+                            </form>
+                        </div>
+
+                        <!-- Pestaña 2: Registrarse -->
+                        <div id="tab-registro" class="auth-tab-pane @(TempData["TabActiva"]?.ToString() == "registro" ? "active" : "")">
+                            <!-- La validación del navegador se ejecuta antes de enviar el registro al servidor. -->
+                            <form method="post" asp-page="/Index" asp-page-handler="Registro" onsubmit="return validarFormularioRegistro()">
+
+                                <div class="form-group">
+                                    <label for="regUsername">Nombre de usuario</label>
+                                    <input type="text" id="regUsername" name="Nombre" required placeholder="Ej. Ricardo_Agape" pattern="^[a-zA-Z0-9_.-]{3,20}$" title="De 3 a 20 letras, números, guion o punto (sin espacios)" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="regCorreo">Correo electrónico</label>
+                                    <input type="email" id="regCorreo" name="Correo" required placeholder="tu@correo.com" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="regPassword">Contraseña</label>
+                                    <div class="password-input-wrapper">
+                                        <input type="password" id="regPassword" name="Password" required placeholder="Crea tu contraseña" oninput="verificarSeguridadPassword()" />
+                                        <button type="button" class="btn-eye-toggle" onclick="toggleVerPassword('regPassword', this)" title="Mostrar contraseña">
+                                            <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Checklist dinámico de seguridad -->
+                                <ul class="password-rules" id="passwordRulesList">
+                                    <li id="rule-length">○ Mínimo 8 caracteres</li>
+                                    <li id="rule-upper">○ Al menos una letra mayúscula (A-Z)</li>
+                                    <li id="rule-special">○ Un carácter especial (@@, #, $, %, !, *, etc.)</li>
+                                    <li id="rule-match">○ Las contraseñas coinciden</li>
+                                </ul>
+
+                                <div class="form-group">
+                                    <label for="regConfirmPassword">Confirmar contraseña</label>
+                                    <div class="password-input-wrapper">
+                                        <input type="password" id="regConfirmPassword" name="ConfirmarPassword" required placeholder="Repite tu contraseña" oninput="verificarSeguridadPassword()" />
+                                        <button type="button" class="btn-eye-toggle" onclick="toggleVerPassword('regConfirmPassword', this)" title="Mostrar contraseña">
+                                            <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn-primary-agape full-width">Crear Cuenta</button>
+                            </form>
+                        </div>
+                    </div>
+                }
+            </div>
+        </nav>
+    </div>
+</header>
