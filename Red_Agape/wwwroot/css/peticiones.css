@@ -1,0 +1,295 @@
+﻿/* PALETA DE COLORES OFICIAL - RED ÁGAPE */
+:root {
+    --color-primary-cta: #FFB000; /* 1. Botones, enlaces y llamadas a la atención */
+    --color-card-alt: #E5C07B; /* 2. Fondo de tarjetas, secciones alternadas, bordes/etiquetas */
+    --color-secondary-Accent: #8C6A3E; /* 3. Textos secundarios, footer, iconos */
+    --color-text-main: #1C1C1C; /* 4. Color principal del texto */
+    --color-bg-main: #F7F1E3; /* 5. Color de fondo general */
+
+    --color-white: #FFFFFF;
+    --shadow-soft: 0 4px 12px rgba(28, 28, 28, 0.08);
+    --radius-md: 12px;
+    --radius-sm: 8px;
+}
+
+/* ESTILOS BASE */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    min-height: 100%;
+    scroll-behavior: smooth;
+}
+
+#proyecto,
+#categorias,
+#comunidad,
+#equipo,
+#voluntariado-ecos {
+    scroll-margin-top: 80px;
+}
+
+@media (max-width: 768px) {
+    #proyecto,
+    #categorias,
+    #comunidad,
+    #equipo,
+    #voluntariado-ecos {
+        scroll-margin-top: 0;
+    }
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-bg-main);
+    color: var(--color-text-main);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    line-height: 1.6;
+}
+
+/* Usa la paleta, el reset, el body (flex) y el footer de index-agape.css.
+   Solo se añade el color de error que ahí no existe. */
+:root {
+    --color-error: #9B2620;
+}
+
+.pagina-peticiones {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 50px 16px 70px;
+}
+
+.encabezado-peticiones {
+    text-align: center;
+    padding-bottom: 24px;
+    margin-bottom: 28px;
+    border-bottom: 2px solid var(--color-card-alt);
+}
+
+    .encabezado-peticiones h1 {
+        margin: 0 0 8px;
+        font-size: 2.2rem;
+        line-height: 1.2;
+    }
+
+    .encabezado-peticiones p {
+        margin: 0;
+        color: var(--color-secondary-Accent);
+        font-weight: 600;
+    }
+
+/* FILTROS */
+.filtros {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 16px;
+    align-items: end;
+    padding: 22px;
+    background-color: rgba(229, 192, 123, 0.25);
+    border: 1px solid var(--color-card-alt);
+    border-radius: var(--radius-md);
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+}
+
+    .campo label {
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+
+.filtros input,
+.filtros select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--color-secondary-Accent);
+    border-radius: var(--radius-sm);
+    background-color: var(--color-white);
+    font: inherit;
+}
+
+    .filtros input:focus,
+    .filtros select:focus {
+        outline: none;
+        border-color: var(--color-primary-cta);
+        box-shadow: 0 0 0 3px rgba(255, 176, 0, 0.4);
+    }
+
+.filtros-acciones {
+    display: flex;
+    gap: 10px;
+}
+
+.resultado-conteo {
+    margin: 20px 0 12px;
+    color: var(--color-secondary-Accent);
+    font-weight: 600;
+}
+
+/* TARJETAS */
+.lista-peticiones {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+    gap: 20px;
+}
+
+.peticion-card {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 24px;
+    background-color: var(--color-white);
+    border: 2px solid var(--color-card-alt);
+    border-top: 6px solid var(--color-primary-cta);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-soft);
+}
+
+.peticion-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+    .peticion-header h2 {
+        margin: 0;
+        font-size: 1.15rem;
+    }
+
+    .peticion-header small {
+        color: var(--color-secondary-Accent);
+    }
+
+.badge-fecha {
+    flex-shrink: 0;
+    padding: 4px 12px;
+    background-color: var(--color-card-alt);
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+    .badge-fecha.urgente {
+        background-color: var(--color-error);
+        color: var(--color-white);
+    }
+
+.peticion-descripcion {
+    margin: 0;
+}
+
+/* NECESIDADES */
+.necesidades {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.necesidad {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    background-color: var(--color-bg-main);
+    border: 1px solid var(--color-card-alt);
+    border-radius: var(--radius-sm);
+}
+
+.necesidad-general {
+    padding: 2px 10px;
+    background-color: rgba(255, 176, 0, 0.18);
+    border: 1px solid var(--color-primary-cta);
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-secondary-Accent);
+}
+
+.necesidad-cantidad {
+    margin-left: auto;
+    font-weight: 700;
+}
+
+.peticion-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-top: auto;
+    padding-top: 12px;
+    border-top: 1px solid var(--color-card-alt);
+}
+
+    .peticion-footer small {
+        color: var(--color-secondary-Accent);
+    }
+
+.sin-resultados {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: var(--color-secondary-Accent);
+    font-weight: 600;
+}
+
+/* BOTONES */
+.btn-principal,
+.btn-secundario {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: var(--radius-sm);
+    font: inherit;
+    font-weight: 700;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.2s ease, filter 0.2s ease, background-color 0.2s ease;
+}
+
+.btn-principal {
+    background-color: var(--color-primary-cta);
+    color: var(--color-text-main);
+    border: none;
+}
+
+    .btn-principal:hover {
+        filter: brightness(0.95);
+        transform: translateY(-2px);
+    }
+
+.btn-secundario {
+    background-color: transparent;
+    color: var(--color-text-main);
+    border: 2px solid var(--color-primary-cta);
+}
+
+    .btn-secundario:hover {
+        background-color: var(--color-card-alt);
+    }
+
+@media (max-width: 640px) {
+    .filtros {
+        grid-template-columns: 1fr;
+    }
+
+    .lista-peticiones {
+        grid-template-columns: 1fr;
+    }
+
+    .peticion-footer {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}

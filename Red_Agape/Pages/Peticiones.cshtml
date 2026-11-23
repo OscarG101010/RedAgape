@@ -1,0 +1,105 @@
+﻿@page
+@model Red_Agape.Pages.PeticionesModel
+
+<link rel="stylesheet" href="~/css/index-agape.css" />
+<link rel="stylesheet" href="~/css/peticiones.css" />
+<partial name="_NavbarAgape" />
+
+<main class="agape-main">
+    <div class="pagina-peticiones">
+
+        <header class="encabezado-peticiones">
+            <h1>Peticiones de las organizaciones</h1>
+            <p>Elige una necesidad y dona justo lo que más hace falta.</p>
+        </header>
+
+        <!-- Filtros -->
+        <form class="filtros" method="get">
+            <div class="campo">
+                <label for="Busqueda">Organización</label>
+                <input asp-for="Busqueda" placeholder="Buscar por nombre..." />
+            </div>
+
+            <div class="campo">
+                <label for="CategoriaId">Categoría</label>
+                <select asp-for="CategoriaId">
+                    <option value="">Todas</option>
+                    @foreach (var g in Model.CategoriasGenerales)
+                    {
+                        <option value="@g.CategoriaId">@g.Nombre</option>
+                    }
+                </select>
+            </div>
+
+            <div class="filtros-acciones">
+                <button type="submit" class="btn-principal">Filtrar</button>
+                <a asp-page="/Peticiones" class="btn-secundario">Limpiar</a>
+            </div>
+        </form>
+
+        <p class="resultado-conteo">@Model.Peticiones.Count petición(es) encontrada(s)</p>
+
+        <!-- Lista de peticiones -->
+        <div class="lista-peticiones">
+            @foreach (var p in Model.Peticiones)
+            {
+                <article class="peticion-card">
+
+                    <header class="peticion-header">
+                        <div>
+                            <h2>@p.OrganizacionNombre</h2>
+                            <small>@p.Zona, @p.Municipio</small>
+                        </div>
+                        <span class="badge-fecha @(p.DiasRestantes <= 7 ? "urgente" : "")">
+                            @(p.DiasRestantes == 0 ? "Vence hoy" : $"{p.DiasRestantes} días")
+                        </span>
+                    </header>
+
+                    <p class="peticion-descripcion">@p.Descripcion</p>
+
+                    <ul class="necesidades">
+                        @foreach (var n in p.Necesidades)
+                        {
+                            <li class="necesidad">
+                                <span class="necesidad-general">@n.GeneralNombre</span>
+                                <strong>@n.Nombre</strong>
+                                <span class="necesidad-cantidad">x @n.Cantidad</span>
+                            </li>
+                        }
+                    </ul>
+
+                    <footer class="peticion-footer">
+                        <small>Fecha límite: @p.FechaLimite.ToString("dd/MM/yyyy")</small>
+
+                        @* Por ahora solo manda orgId; después Donar lo usará para autollenar *@
+                        <a asp-page="/Donar"
+                           asp-route-orgId="@p.OrganizacionId"
+                           asp-route-peticionId="@p.PeticionOrgId"
+                           class="btn-principal">Donar a esta organización</a>
+                    </footer>
+
+                </article>
+            }
+
+            @if (!Model.Peticiones.Any())
+            {
+                <p class="sin-resultados">No hay peticiones con esos filtros.</p>
+            }
+        </div>
+
+    </div>
+</main>
+
+<footer class="agape-footer">
+    <div class="container footer-content">
+        <div class="footer-brand">
+            <h3>Red Ágape</h3>
+            <p>Una red para compartir y ayudar.</p>
+        </div>
+        <div class="footer-academic">
+            <p><strong>Proyecto Final:</strong> Programación Orientada a Objetos 2</p>
+            <p><strong>Profesor:</strong> Ing. Jesus Samuel Villalobos Escobar</p>
+            <p>&copy; @DateTime.Now.Year - Equipo Ágape</p>
+        </div>
+    </div>
+</footer>
