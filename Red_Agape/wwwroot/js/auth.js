@@ -15,27 +15,53 @@
     /* ==========================================
         MENÚ DE USUARIO
     ========================================== */
+    const btnNav = document.getElementById('btnNavToggle');
+    const navMenu = document.getElementById('navMenu');
     const btnToggle = document.getElementById('btnUserToggle');
     const dropdownBox = document.getElementById('authDropdownBox');
     const wrapper = document.getElementById('userMenuWrapper');
+
+    function cerrarNav() {
+        navMenu?.classList.remove('open');
+        btnNav?.setAttribute('aria-expanded', 'false');
+    }
+
+    if (btnNav && navMenu) {
+        btnNav.addEventListener('click', function (e) {
+            e.stopPropagation();
+            const abierto = navMenu.classList.toggle('open');
+            btnNav.setAttribute('aria-expanded', abierto);
+            dropdownBox?.classList.remove('show');   // cierra el de usuario
+        });
+
+        // Al tocar un enlace, el menú se cierra
+        navMenu.addEventListener('click', function (e) {
+            if (e.target.closest('a')) cerrarNav();
+        });
+    }
 
     if (btnToggle && dropdownBox) {
 
         btnToggle.addEventListener('click', function (e) {
             e.stopPropagation();
+            cerrarNav();  // cierra el menú de navegación si estaba abierto
             dropdownBox.classList.toggle('show');
         });
 
         dropdownBox.addEventListener('click', function (e) {
             e.stopPropagation();
         });
-
-        document.addEventListener('click', function (e) {
-            if (wrapper && !wrapper.contains(e.target)) {
-                dropdownBox.classList.remove('show');
-            }
-        });
     }
+
+    // Clic fuera: cierra ambos
+    document.addEventListener('click', function (e) {
+        if (wrapper && !wrapper.contains(e.target)) {
+            dropdownBox?.classList.remove('show');
+        }
+        if (navMenu && !navMenu.contains(e.target) && !btnNav?.contains(e.target)) {
+            cerrarNav();
+        }
+    });
 
     /* ==========================================
        CAMBIAR PESTAÑAS LOGIN / REGISTRO

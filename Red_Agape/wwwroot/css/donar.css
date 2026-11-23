@@ -272,6 +272,28 @@ body {
         background-color: var(--color-card-alt);
     }
 
+/* Separación entre tarjetas de artículo */
+#contenedor-articulos {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Tarjeta que agrupa dirección, zona, organización y comentarios */
+.datos-entrega {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 22px;
+    background-color: rgba(229, 192, 123, 0.25);
+    border: 1px solid var(--color-card-alt);
+    border-radius: var(--radius-md);
+}
+
+    .datos-entrega[hidden] {
+        display: none;
+    }
+
 /* CATEGORÍAS */
 .categorias-campo {
     min-width: 0; /* evita que el fieldset desborde dentro del flex */
@@ -498,7 +520,7 @@ body {
         padding: 22px;
     }
 
-    .tipo-entrega, .articulo {
+    .tipo-entrega, .articulo .datos-entrega {
         padding: 16px;
     }
 

@@ -15,13 +15,22 @@
             <span class="logo-placeholder">♥</span>
             <span class="brand-name">Red Ágape</span>
         </a>
+
+        <button type="button" class="btn-hamburger" id="btnNavToggle"
+                aria-label="Abrir menú" aria-expanded="false" aria-controls="navMenu">
+            <span></span><span></span><span></span>
+        </button>
+
         <nav class="nav-links">
-            <!-- Enlaces principales para recorrer las secciones de la página. -->
-            <a asp-page="/Index" asp-fragment="proyecto">Proyecto Ágape</a>
-            <!-- Enlaces hacia las futuras pantallas del proyecto -->
-            <a asp-page="/Index" asp-fragment="categorias" class="btn-link">¿Qué Donar?</a>
-            <a asp-page="/Index" asp-fragment="equipo">Equipo Ágape</a>
-            <a asp-page="/Donar" class="btn-primary-agape">Quiero Donar</a>
+            <div class="nav-menu" id="navMenu">
+                <!-- Enlaces principales para recorrer las secciones de la página. -->
+                <a asp-page="/Index" asp-fragment="proyecto">Proyecto Ágape</a>
+                <!-- Enlaces hacia las futuras pantallas del proyecto -->
+                <a asp-page="/Index" asp-fragment="categorias" class="btn-link">¿Qué Donar?</a>
+                <a asp-page="/Index" asp-fragment="comunidad">Comunidad</a>
+                <a asp-page="/Index" asp-fragment="equipo">Equipo Ágape</a>
+                <a asp-page="/Donar" class="btn-primary-agape">Quiero Donar</a>
+            </div>
 
             <!-- NUEVO: Botón y Cajita Flotante a la derecha de "Quiero Donar" -->
             <div class="user-menu-wrapper" id="userMenuWrapper">

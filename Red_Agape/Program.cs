@@ -20,7 +20,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.LoginPath = "/Index";
         options.AccessDeniedPath = "/Index";
         options.ExpireTimeSpan = TimeSpan.FromHours(8);
-        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;//CookieSecurePolicy.Always; // Solo se envía la cookie en conexiones HTTPS
         options.SlidingExpiration = true;
         options.Cookie.HttpOnly = true;
     });

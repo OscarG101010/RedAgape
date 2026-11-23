@@ -32,6 +32,16 @@ html {
     scroll-margin-top: 80px;
 }
 
+@media (max-width: 768px) {
+    #proyecto,
+    #categorias,
+    #comunidad,
+    #equipo,
+    #voluntariado-ecos {
+        scroll-margin-top: 0;
+    }
+}
+
 body {
     min-height: 100vh;
     display: flex;
@@ -140,6 +150,50 @@ body {
     border-radius: 50%;
 }
 
+/* MENÚ HAMBURGUESA (el botón solo aparece en móvil) */
+.nav-menu {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.btn-hamburger {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    width: 42px;
+    height: 42px;
+    background-color: var(--color-white);
+    border: 2px solid var(--color-secondary-Accent);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+}
+
+    .btn-hamburger span {
+        display: block;
+        width: 20px;
+        height: 2px;
+        background-color: var(--color-text-main);
+        border-radius: 2px;
+        transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    /* se convierte en X al abrir */
+    .btn-hamburger[aria-expanded="true"] span:nth-child(1) {
+        transform: translateY(7px) rotate(45deg);
+    }
+
+    .btn-hamburger[aria-expanded="true"] span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .btn-hamburger[aria-expanded="true"] span:nth-child(3) {
+        transform: translateY(-7px) rotate(-45deg);
+    }
+
+
 .nav-links {
     display: flex;
     align-items: center;
@@ -240,7 +294,7 @@ body {
 }
 
 .section-alt {
-    padding: 40px 0;
+    padding: 80px 0;
     background-color: rgba(229, 192, 123, 0.25); /* Versión suave de #E5C07B para alternar secciones */
     border-top: 1px solid var(--color-card-alt);
     border-bottom: 1px solid var(--color-card-alt);
@@ -343,14 +397,23 @@ body {
 .gallery-placeholder {
     background-color: var(--color-card-alt);
     height: 220px;
+    padding: 0;
+    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 15px;
     text-align: center;
     color: var(--color-secondary-Accent);
     font-weight: 600;
 }
+
+    .gallery-placeholder img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* llena el recuadro sin deformar */
+        object-position: center;
+    }
 
 .gallery-caption {
     padding: 15px;
@@ -523,6 +586,8 @@ body {
     box-shadow: 0 10px 25px rgba(28, 28, 28, 0.18);
     padding: 20px;
     z-index: 250;
+    max-height: calc(100vh - 110px);
+    overflow-y: auto;
 }
 
     .auth-dropdown-box.show {
@@ -699,3 +764,189 @@ input[type="password"]::-ms-clear {
         stroke-linejoin: round;
         fill: none;
     }
+
+
+
+/* MÓVIL */
+.container {
+    padding: 0 16px;
+}
+
+/* La foto real no necesita el borde del placeholder */
+.hero-image-box .image-skeleton {
+    border: none;
+}
+
+/* Evita desborde en pantallas de 320px */
+.cards-grid-3 {
+    grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+}
+
+@media (max-width: 768px) {
+
+    /* NAVBAR compacta: deja de ser sticky para no tapar contenido */
+    .agape-navbar {
+        position: relative;
+        padding: 10px 0;
+    }
+
+    .nav-container {
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 8px 10px;
+    }
+
+    .brand-logo {
+        order: 1;
+        font-size: 1.15rem;
+        margin-right: auto;
+    }
+
+    .logo-placeholder {
+        width: 30px;
+        height: 30px;
+    }
+
+    .nav-links {
+        justify-content: center;
+        gap: 8px 14px;
+        font-size: 0.9rem;
+        display: contents;
+    }
+
+        .nav-links .btn-primary-agape,
+        .btn-user-toggle {
+            padding: 8px 14px;
+            font-size: 0.9rem;
+        }
+
+    .user-menu-wrapper {
+        order: 2;
+    }
+
+    .btn-hamburger {
+        display: flex;
+        order: 3;
+    }
+
+    .btn-user-toggle {
+        min-height: 42px;
+        padding: 6px 10px;
+        gap: 6px;
+        font-size: 0.88rem;
+    }
+
+        /* nombre largo con "…" para que no empuje el layout */
+        .btn-user-toggle > span:first-child {
+            max-width: 110px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+    /* Panel de enlaces: oculto hasta tocar ☰ */
+    .nav-menu {
+        order: 4;
+        flex-basis: 100%;
+        display: none;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        margin-top: 4px;
+        border-top: 1px solid var(--color-card-alt);
+    }
+
+        .nav-menu.open {
+            display: flex;
+        }
+
+        .nav-menu a:not(.btn-primary-agape) {
+            padding: 12px 4px;
+            border-bottom: 1px solid rgba(229, 192, 123, 0.5);
+        }
+
+        .nav-menu .btn-primary-agape {
+            margin-top: 12px;
+            padding: 12px 14px;
+            text-align: center;
+        }
+
+    /* La cajita se ancla a la navbar y ocupa el ancho de la pantalla */
+    .user-menu-wrapper {
+        position: static;
+    }
+
+    .auth-dropdown-box {
+        position: absolute;
+        top: 100%;
+        left: 16px;
+        right: 16px;
+        width: auto;
+        margin-top: 8px;
+        max-height: 75vh;
+        overflow-y: auto;
+    }
+
+    /* HERO */
+    .hero-section {
+        padding: 28px 0 40px;
+    }
+
+    .hero-grid {
+        gap: 28px;
+    }
+
+    .hero-content h1 {
+        font-size: 1.9rem;
+    }
+
+    .hero-description {
+        font-size: 1rem;
+    }
+
+    .hero-actions {
+        flex-direction: column;
+    }
+
+        .hero-actions a {
+            width: 100%;
+            text-align: center;
+        }
+
+    .hero-image-box {
+        transform: none;
+        height: 240px;
+    }
+
+    /* SECCIONES Y TARJETAS */
+    .section-standard {
+        padding: 56px 0;
+    }
+
+    .section-header h2 {
+        font-size: 1.6rem;
+    }
+
+    .agape-card {
+        padding: 22px;
+    }
+
+    .team-card {
+        padding: 24px 16px;
+    }
+
+    /* FOOTER */
+    .footer-content,
+    .footer-academic {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+}
+
+/* En pantallas muy angostas se oculta la etiqueta de rol */
+@media (max-width: 420px) {
+    .role-pill {
+        display: none;
+    }
+}

@@ -57,79 +57,81 @@
 
             </section>
 
-            <!-- Dirección -->
-            <section class="campo" id="seccion-direccion">
+            <div class="datos-entrega">
+                <!-- Dirección -->
+                <section class="campo" id="seccion-direccion">
 
-                <label asp-for="Input.DireccionRecoger">
-                    Dirección de recolección
-                </label>
+                    <label asp-for="Input.DireccionRecoger">
+                        Dirección de recolección
+                    </label>
 
-                <input asp-for="Input.DireccionRecoger"
-                       placeholder="Calle, número, colonia..." />
+                    <input asp-for="Input.DireccionRecoger"
+                        placeholder="Calle, número, colonia..." />
 
-                <span asp-validation-for="Input.DireccionRecoger"></span>
+                    <span asp-validation-for="Input.DireccionRecoger"></span>
 
-            </section>
+                </section>
 
-            <!-- Zona -->
-            <section class="campo">
+                <!-- Zona -->
+                <section class="campo">
 
-                <label asp-for="Input.ZonaId">Zona</label>
+                    <label asp-for="Input.ZonaId">Zona</label>
 
-                <select asp-for="Input.ZonaId">
-                    <option value="">Selecciona tu zona...</option>
-                        @foreach (var z in Model.Zonas)
-                        {
-                            <option value="@z.ZonaId"
-                                    data-lat="@(z.Latitud?.ToString(System.Globalization.CultureInfo.InvariantCulture))"
-                                    data-lng="@(z.Longitud?.ToString(System.Globalization.CultureInfo.InvariantCulture))">@z.Nombre (@z.Municipio)</option>
-                        }
-                </select>
+                    <select asp-for="Input.ZonaId">
+                        <option value="">Selecciona tu zona...</option>
+                            @foreach (var z in Model.Zonas)
+                            {
+                                <option value="@z.ZonaId"
+                                        data-lat="@(z.Latitud?.ToString(System.Globalization.CultureInfo.InvariantCulture))"
+                                        data-lng="@(z.Longitud?.ToString(System.Globalization.CultureInfo.InvariantCulture))">@z.Nombre (@z.Municipio)</option>
+                            }
+                    </select>
 
-                <span asp-validation-for="Input.ZonaId"></span>
+                    <span asp-validation-for="Input.ZonaId"></span>
 
-            </section>
+                </section>
 
-            <!-- Organización -->
-            <section class="campo">
+                <!-- Organización -->
+                <section class="campo">
 
-                <label asp-for="Input.OrgDestinoId">
-                    Organización destinataria
-                </label>
+                    <label asp-for="Input.OrgDestinoId">
+                        Organización destinataria
+                    </label>
 
-                <select asp-for="Input.OrgDestinoId">
-                    <option value="">Selecciona una organización...</option>
-                        @foreach (var org in Model.Organizaciones)
-                        {
-                            var lat = org.Latitud ?? org.Zona.Latitud;
-                            var lng = org.Longitud ?? org.Zona.Longitud;
+                    <select asp-for="Input.OrgDestinoId">
+                        <option value="">Selecciona una organización...</option>
+                            @foreach (var org in Model.Organizaciones)
+                            {
+                                var lat = org.Latitud ?? org.Zona.Latitud;
+                                var lng = org.Longitud ?? org.Zona.Longitud;
 
-                            <option value="@org.OrganizacionId"
-                                    data-direccion="@org.Direccion"
-                                    data-lat="@(lat?.ToString(System.Globalization.CultureInfo.InvariantCulture))"
-                                    data-lng="@(lng?.ToString(System.Globalization.CultureInfo.InvariantCulture))">@org.Nombre</option>
-                        }
-                </select>
+                                <option value="@org.OrganizacionId"
+                                        data-direccion="@org.Direccion"
+                                        data-lat="@(lat?.ToString(System.Globalization.CultureInfo.InvariantCulture))"
+                                        data-lng="@(lng?.ToString(System.Globalization.CultureInfo.InvariantCulture))">@org.Nombre</option>
+                            }
+                    </select>
 
-                <p class="info-entrega" id="info-direccion-org" hidden></p>
+                    <p class="info-entrega" id="info-direccion-org" hidden></p>
 
-                <span asp-validation-for="Input.OrgDestinoId"></span>
+                    <span asp-validation-for="Input.OrgDestinoId"></span>
 
-            </section>
+                </section>
 
-            <!-- Descripción general -->
-            <section class="campo">
+                <!-- Descripción general -->
+                <section class="campo">
 
-                <label asp-for="Input.Descripcion">
-                    Comentarios adicionales
-                </label>
+                    <label asp-for="Input.Descripcion">
+                        Comentarios adicionales
+                    </label>
 
-                <textarea asp-for="Input.Descripcion"
-                          placeholder="Agrega información adicional sobre tu donación..."></textarea>
+                    <textarea asp-for="Input.Descripcion"
+                            placeholder="Agrega información adicional sobre tu donación..."></textarea>
 
-                <span asp-validation-for="Input.Descripcion"></span>
+                    <span asp-validation-for="Input.Descripcion"></span>
 
-            </section>
+                </section>
+            </div>
 
             <!-- Artículos -->
             <div class="lista-articulos">
