@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Red_Agape.Models
 {
@@ -21,6 +22,9 @@ namespace Red_Agape.Models
         public string? DireccionRecoger { get; set; }
         public DateTime FechaRegistro { get; set; }
         public string? Descripcion { get; set; }
+        [StringLength(20)]
+        [Column(TypeName = "varchar(20)")]
+        public string? CodigoQR { get; set; }
 
         // Propiedades de navegación
         public Usuario Donante { get; set; } = null!;

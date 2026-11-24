@@ -29,6 +29,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 builder.Services.AddAuthorization();
 
 builder.Services.AddScoped<IPasswordHasher<Usuario>, PasswordHasher<Usuario>>(); // Cuando se pida hasher se agrega el servicio
+builder.Services.AddScoped<Red_Agape.Services.CorreoService>();
+
 
 var app = builder.Build();
 

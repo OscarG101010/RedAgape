@@ -130,6 +130,11 @@ namespace Red_Agape.Data
             mb.Entity<Zona>().Property(z => z.Longitud).HasPrecision(9, 6);
             mb.Entity<Organizacion>().Property(o => o.Latitud).HasPrecision(9, 6);
             mb.Entity<Organizacion>().Property(o => o.Longitud).HasPrecision(9, 6);
+
+            mb.Entity<Donacion>()
+                .HasIndex(d => d.CodigoQR)
+                .IsUnique()
+                .HasFilter("[CodigoQR] IS NOT NULL");
         }
     }
 }

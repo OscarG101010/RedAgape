@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Red_Agape.Data;
 using Red_Agape.Models;
+using Red_Agape.Services;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 
@@ -54,17 +55,25 @@ namespace Red_Agape.Pages
         public bool VieneDePeticion => Peticion != null;
         private readonly RedAgapeContext _context;
         private readonly IWebHostEnvironment _env;
+        private readonly CorreoService _correo;
 
         private static readonly string[] _extPermitidas = { ".jpg", ".jpeg", ".png", ".webp" };
         private const long MaxBytes = 5 * 1024 * 1024; // 5 MB
 
+
+        [StringLength(20)]
+        public string? CodigoQR { get; set; }
+        private const int BaseQr = 1000; // const -> inmutable
+
+        
         [BindProperty]
         public DonacionInput Input { get; set; } = new DonacionInput();
 
-        public DonarModel(RedAgapeContext context, IWebHostEnvironment env)
+        public DonarModel(RedAgapeContext context, IWebHostEnvironment env, CorreoService correo)
         {
             _context = context;
             _env = env;
+            _correo = correo;
         }
 
         public async Task<IActionResult> OnGetAsync(int? peticionId)
@@ -214,7 +223,40 @@ namespace Red_Agape.Pages
             _context.Donaciones.Add(donacion);
             await _context.SaveChangesAsync();
 
-            TempData["Mensaje"] = "¡Donación registrada! Aquí puedes darle seguimiento.";
+            // El id lo asigna la BD al guardar, por eso el código se genera después
+            donacion.CodigoQR = $"AGAPE-{BaseQr + donacion.DonacionId}";
+            await _context.SaveChangesAsync();
+
+            // Correo con el QR: si falla, la donación ya quedó guardada
+            var mensaje = "¡Donación registrada! Aquí puedes darle seguimiento.";
+            var correo = User.FindFirstValue(ClaimTypes.Email);
+
+            if (!string.IsNullOrWhiteSpace(correo))
+            {
+                try
+                {
+                    var orgNombre = await _context.Organizaciones
+                        .Where(o => o.OrganizacionId == donacion.OrgDestinoId)
+                        .Select(o => o.Nombre)
+                        .FirstAsync();
+
+                    var total = articulos.Sum(a => a.Cantidad);
+
+                    // Formato que entiende el móvil: CODIGO|cantidad|organizacion|tipoEntrega
+                    var contenidoQr = $"{donacion.CodigoQR}|{total}|{orgNombre.Replace("|", " ")}|{donacion.TipoEntrega}";
+
+                    await _correo.EnviarQrDonacionAsync(correo, User.Identity?.Name ?? "donante",
+                        donacion.CodigoQR, contenidoQr, orgNombre, total);
+
+                    mensaje += " Te enviamos tu código QR por correo.";
+                }
+                catch
+                {
+                    mensaje += " No pudimos enviar el correo con tu QR.";
+                }
+            }
+
+            TempData["Mensaje"] = mensaje;
             return RedirectToPage("/MisDonaciones");
         }
 
