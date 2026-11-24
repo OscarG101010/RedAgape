@@ -20,6 +20,19 @@
 
             <div asp-validation-summary="ModelOnly"></div>
 
+                @if (Model.VieneDePeticion)
+                {
+                    <div class="aviso-peticion">
+                        Estás donando a la petición de <strong>@Model.Peticion!.Organizacion.Nombre</strong>.
+                        Solo puedes elegir las categorías que solicitó.
+                        <a asp-page="/Donar">Donar libremente</a>
+                    </div>
+
+                    @* Inputs HTML normales (no asp-for) para que el valor no lo sobreescriba el ModelState *@
+                    <input type="hidden" name="Input.PeticionOrgId" value="@Model.Input.PeticionOrgId" />
+                    <input type="hidden" name="Input.OrgDestinoId" value="@Model.Input.OrgDestinoId" />
+                }
+
             <!-- Información del donante -->
             <section class="campo campo-donante">
                 <label>Nombre del donante</label>
@@ -98,7 +111,7 @@
                         Organización destinataria
                     </label>
 
-                    <select asp-for="Input.OrgDestinoId">
+                        <select asp-for="Input.OrgDestinoId" disabled="@Model.VieneDePeticion">
                         <option value="">Selecciona una organización...</option>
                             @foreach (var org in Model.Organizaciones)
                             {

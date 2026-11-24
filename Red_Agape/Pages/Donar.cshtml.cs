@@ -49,6 +49,9 @@ namespace Red_Agape.Pages
         public List<Categoria> Categorias { get; set; } = new();
         public List<Zona> Zonas { get; set; } = null!;
         public List<Organizacion> Organizaciones { get; set; } = null!;
+        public PeticionOrg? Peticion { get; set; }
+        public HashSet<int> CategoriasPermitidasIds { get; set; } = new();
+        public bool VieneDePeticion => Peticion != null;
         private readonly RedAgapeContext _context;
         private readonly IWebHostEnvironment _env;
 
@@ -64,13 +67,42 @@ namespace Red_Agape.Pages
             _env = env;
         }
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync(int? peticionId)
         {
+            if (peticionId is not null)
+            {
+                await CargarPeticionAsync(peticionId.Value);
+
+                if (Peticion is null)
+                {
+                    TempData["Mensaje"] = "Esa petición ya no está disponible.";
+                    return RedirectToPage("/Peticiones");
+                }
+
+                Input.PeticionOrgId = Peticion.PeticionOrgId;
+                Input.OrgDestinoId = Peticion.OrganizacionId;
+            }
+
             await CargarListasAsync();
+            return Page();
         }
 
         public async Task<IActionResult> OnPostDonacionAsync()
         {
+            if (Input.PeticionOrgId is not null)
+            {
+                await CargarPeticionAsync(Input.PeticionOrgId.Value);
+                
+                if (Peticion is null)
+                {
+                    ModelState.AddModelError(string.Empty, "La petición ya no está disponible.");
+                }
+                else
+                {
+                    Input.OrgDestinoId = Peticion.OrganizacionId;
+                }
+            }
+
             // Validaciones 
             if (Input.TipoEntrega == TipoEntrega.Recoleccion
                 && string.IsNullOrWhiteSpace(Input.DireccionRecoger))
@@ -92,8 +124,14 @@ namespace Red_Agape.Pages
 
             for (var i = 0; i < Input.Articulos.Count; i++)
             {
-                if (Input.Articulos[i].CategoriasIds.Any(id => !idsValidos.Contains(id)))
+                var ids = Input.Articulos[i].CategoriasIds;
+
+                if (ids.Any(id => !idsValidos.Contains(id)))
                     ModelState.AddModelError($"Input.Articulos[{i}].CategoriasIds", "Categoría no válida.");
+
+                if (Peticion is not null && ids.Any(id => !CategoriasPermitidasIds.Contains(id)))
+                    ModelState.AddModelError($"Input.Articulos[{i}].CategoriasIds",
+                        "Solo puedes elegir categorías que la organización solicitó.");
             }
 
             for (var i = 0; i < Input.Articulos.Count; i++) // Validación Foto
@@ -226,6 +264,42 @@ namespace Red_Agape.Pages
                 .Include(c => c.Subcategorias)
                 .OrderBy(c => c.Nombre)
                 .ToListAsync();
+
+            if (Peticion is not null)
+            {
+                foreach (var g in Categorias)
+                    g.Subcategorias = g.Subcategorias
+                        .Where(s => CategoriasPermitidasIds.Contains(s.CategoriaId))
+                        .ToList();
+
+                Categorias = Categorias.Where(g => g.Subcategorias.Any()).ToList();
+            }
+        }
+
+        private async Task CargarPeticionAsync(int peticionId)
+        {
+            Peticion = await _context.PeticionesOrg
+                .AsNoTracking()
+                .Include(p => p.Organizacion)
+                .FirstOrDefaultAsync(p => p.PeticionOrgId == peticionId
+                                       && p.Activo
+                                       && p.FechaLimite >= DateTime.Now
+                                       && p.Organizacion.Activo);
+
+            if (Peticion is null) return;
+
+            // Lo que pidió la organización (puede ser una general o una sub)
+            var pedidas = await _context.CategoriasPeticionOrg
+                .Where(x => x.PeticionOrgId == peticionId)
+                .Select(x => x.CategoriaId)
+                .ToListAsync();
+
+            // Permitidas = las pedidas + las subcategorías de cualquier general pedida
+            CategoriasPermitidasIds = (await _context.Categorias
+                .Where(c => pedidas.Contains(c.CategoriaId)
+                         || (c.CategoriaPadreId != null && pedidas.Contains(c.CategoriaPadreId.Value)))
+                .Select(c => c.CategoriaId)
+                .ToListAsync()).ToHashSet();
         }
     }
 }

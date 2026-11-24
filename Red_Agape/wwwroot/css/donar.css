@@ -73,6 +73,20 @@ body {
     margin-bottom: 12px;
 }
 
+.aviso-peticion {
+    background: #F7F1E3;
+    border-left: 4px solid #FFB000;
+    color: #8C6A3E;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+    .aviso-peticion a {
+        color: #8C6A3E;
+        font-weight: 600;
+    }
+
 /* FORMULARIO: aquí estaba el problema, ahora sí hay separación entre secciones */
 .form-donar {
     display: flex;

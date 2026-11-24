@@ -64,8 +64,10 @@
                             @if (User.IsInRole(RolesAgape.Organizacion) || User.IsInRole(RolesAgape.Administrador))
                             {
                                 <a href="#validar-donativos">📦 Validar Donaciones</a>
+                                <a href="#Crear-Peticiones">📋 Crear Peticiones</a>
                             }
                             <a asp-page="/MisDonaciones"> Mis Solicitudes / Donativos</a>
+                            <a asp-page="/Peticiones"> Ver Peticiones</a>
                         </div>
 
                         <form method="post" asp-page="/Index" asp-page-handler="Logout">
